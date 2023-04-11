@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<title>Looper test</title>
+	</head>
+	<body>
+		<div id="looper">Waiting first render...</div>
+		
+		<script src="looper.js"></script>
+		<script>
+
+const div = document.getElementById("looper");
+
+looper.setFps(60);
+looper.saveFpsHistory = true;
+
+looper.renderFunction = () => {
+	
+	div.innerHTML = '<b>Looper Data</b>';
+	div.innerHTML += '<br>Expected FPS: ' + looper.getFps().toFixed(1);
+	div.innerHTML += '<br>Current FPS: ' + looper.getCurrentFps().toFixed(3);
+	div.innerHTML += '<br>FPS average: ' + looper.getFpsAverage().toFixed(3);
+	div.innerHTML += '<br>Delta (ms): ' + looper.delta;
+	div.innerHTML += '<br>Total time (s): ' + looper.totalTime/1000;
+	div.innerHTML += '<br>Ticks: ' + looper.ticks;
+}
+looper.start();
+
+		</script>
+	<body>
+</html>
