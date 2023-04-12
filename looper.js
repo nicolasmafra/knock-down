@@ -1,6 +1,6 @@
 const looper = {
 	maxDeviation: 50,
-	period: 20000,
+	period: 1000/60,
 	requestBeforeRender: false,
 	renderFunction: null,
 	
