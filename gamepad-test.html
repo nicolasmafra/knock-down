@@ -5,10 +5,13 @@
 	<body>
 		<div id="gamepad"></div>
 		
+		<script src="gamepad-keyboard.js"></script>
 		<script src="gamepad-proxy.js"></script>
 		<script>
 
 const div = document.getElementById('gamepad');
+
+gamepadKeyboard.configure();
 
 function fillGamedpadDiv() {
 	const gamepad = gamepadProxy.getGamepads()[0];

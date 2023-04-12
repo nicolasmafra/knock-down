@@ -8,6 +8,7 @@ const game = {
 		this.fpsElement = document.getElementById('FPS');
 		this.boxElement = document.getElementById('box');
 		
+		gamepadKeyboard.configure();
 		looper.saveFpsHistory = true;
 		looper.renderFunction = (delta) => this.render(delta);
 		looper.start();

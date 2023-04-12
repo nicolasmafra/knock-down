@@ -56,9 +56,13 @@ const gamepadSchemas = [
 const gamepadProxy = {
 	
 	getGamepads: function() {
-		return navigator.getGamepads()
-			.map((gp, index) => this.mapGamepad(gp, index))
-			.filter(gp => gp);
+		let gamepads = navigator.getGamepads()
+			.map((gp, index) => this.mapGamepad(gp, index));
+		
+		if (gamepadKeyboard) {
+			gamepads.push(gamepadKeyboard.getGamepad());
+		}
+		return gamepads.filter(gp => gp);
 	},
 	
 	findSchema: function(gamepad, index) {
