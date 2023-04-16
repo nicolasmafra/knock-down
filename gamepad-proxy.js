@@ -65,6 +65,17 @@ const gamepadProxy = {
 		return gamepads.filter(gp => gp);
 	},
 	
+	normalizeAxisPair: function(array) {
+		let x = array[0];
+		let y = array[1];
+		let d2 = x*x + y*y;
+		if (d2 > 1) {
+			let d = Math.sqrt(d2);
+			array[0] /= d;
+			array[1] /= d;
+		}
+	},
+
 	findSchema: function(gamepad, index) {
 		if (!gamepad) {
 			return null;

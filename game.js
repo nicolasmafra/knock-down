@@ -19,8 +19,14 @@ const game = {
 		
 		const gamepad = gamepadProxy.getGamepads()[0];
 		if (gamepad) {
-			this.boxPosition[0] += gamepad.buttons[15].value - gamepad.buttons[14].value + gamepad.axes[0];
-			this.boxPosition[1] += gamepad.buttons[13].value - gamepad.buttons[12].value + gamepad.axes[1];
+			let pair = [0,0]
+			pair[0] += gamepad.buttons[15].value - gamepad.buttons[14].value + gamepad.axes[0];
+			pair[1] += gamepad.buttons[13].value - gamepad.buttons[12].value + gamepad.axes[1];
+			
+			gamepadProxy.normalizeAxisPair(pair);
+			
+			this.boxPosition[0] += pair[0];
+			this.boxPosition[1] += pair[1];
 		}
 		this.boxElement.style.left = this.boxPosition[0] + "px";
 		this.boxElement.style.top = this.boxPosition[1] + "px";
