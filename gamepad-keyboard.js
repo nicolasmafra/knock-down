@@ -74,7 +74,8 @@ const gamepadKeyboard = {
 	onMouseStateChange: function(event) {
 		var flags = event.buttons !== undefined ? event.buttons : event.which;
 		this.mouseState = (flags & 1) === 1;
-		this.mouseStartPosition = [ event.pageX, event.pageY ];
+		this.mouseStartPosition[0] = event.pageX;
+		this.mouseStartPosition[1] = event.pageY;
 		this.onmousemove(event);
 	},
 	
