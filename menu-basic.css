@@ -6,6 +6,8 @@
 	margin: 1vh;
 	padding: 1vh;
 	border-radius: 5px;
+    cursor: pointer;
+    background-color: gainsboro;
 }
 .menu-title {
     font-size: 10vh;
@@ -21,6 +23,8 @@
     font-size: 8vh;
 	font-family: sans-serif;
 	text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
 }
 .menu-content {
     position: absolute;

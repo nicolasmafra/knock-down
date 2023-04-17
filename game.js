@@ -4,6 +4,7 @@ const game = {
 	fpsElement: null,
 	boxElement: null,
 	boxPosition: [0,0],
+	boxMove: [0,0],
 
 	start: function() {
 		menuLib.hide();
@@ -19,18 +20,22 @@ const game = {
 	},
 	
 	render: function(delta) {
-		this.fpsElement.innerHTML = looper.getFpsAverage().toFixed(1);
+		if (looper.ticks % 15 == 0) {
+			this.fpsElement.innerHTML = looper.getFpsAverage().toFixed(2);
+		}
+		
+		this.boxMove[0] = 0;
+		this.boxMove[1] = 0;
 		
 		const gamepad = gamepadProxy.getGamepads()[0];
 		if (gamepad) {
-			let pair = [0,0]
-			pair[0] += gamepad.buttons[15].value - gamepad.buttons[14].value + gamepad.axes[0];
-			pair[1] += gamepad.buttons[13].value - gamepad.buttons[12].value + gamepad.axes[1];
+			this.boxMove[0] += gamepad.buttons[15].value - gamepad.buttons[14].value + gamepad.axes[0];
+			this.boxMove[1] += gamepad.buttons[13].value - gamepad.buttons[12].value + gamepad.axes[1];
 			
-			gamepadProxy.normalizeAxisPair(pair);
+			gamepadProxy.normalizeAxisPair(this.boxMove);
 			
-			this.boxPosition[0] += pair[0];
-			this.boxPosition[1] += pair[1];
+			this.boxPosition[0] += this.boxMove[0];
+			this.boxPosition[1] += this.boxMove[1];
 		}
 		this.boxElement.style.left = this.boxPosition[0] + "px";
 		this.boxElement.style.top = this.boxPosition[1] + "px";

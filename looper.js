@@ -14,7 +14,7 @@ const looper = {
 	delayed: 0,
 	
 	saveFpsHistory: false,
-	fpsHistoryLength: 100,
+	fpsHistoryLength: 30,
 	fpsHistory: [],
 	
 	setFps: function(fps) {
@@ -74,7 +74,7 @@ const looper = {
 			this.ticks++;
 			this.delayed = diff > this.period ? (diff - this.period) : 0;
 			
-			if (this.saveFpsHistory) {
+			if (this.saveFpsHistory && this.ticks > 1) {
 				this.fpsHistory.push(this.getCurrentFps());
 				if (this.fpsHistory.length > this.fpsHistoryLength) {
 					this.fpsHistory.shift();
