@@ -30,6 +30,10 @@ const looper = {
 		const sum = this.fpsHistory.reduce((a, b) => a + b, 0);
 		return (sum / this.fpsHistory.length) || 0;
 	},
+
+	isRunning: function() {
+		return this.requestAnimationFrameId != null;
+	},
 	
 	start: function() {
 		this.stop();
@@ -49,6 +53,7 @@ const looper = {
 	stop: function() {
 		if (this.requestAnimationFrameId) {
 			cancelAnimationFrame(this.requestAnimationFrameId);
+			this.requestAnimationFrameId = null;
 		}
 	},
 	

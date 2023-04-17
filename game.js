@@ -1,10 +1,14 @@
 const game = {
 
+	container: document.getElementsByClassName("game-container")[0],
 	fpsElement: null,
 	boxElement: null,
 	boxPosition: [0,0],
 
 	start: function() {
+		menuLib.hide();
+        this.container.classList.remove('game-invisible');
+
 		this.fpsElement = document.getElementById('FPS');
 		this.boxElement = document.getElementById('box');
 		
@@ -33,4 +37,15 @@ const game = {
 	},
 };
 
-game.start();
+menuData = {
+    title: "Easy Game dev",
+    children: {
+        "play": {
+            title: "Play",
+            action: () => game.start(),
+        },
+    }
+};
+
+menuLib.component = document.getElementsByClassName("menu-content")[0];
+menuLib.show();

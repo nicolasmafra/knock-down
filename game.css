@@ -1,3 +1,20 @@
+body {
+	margin: 0;
+}
+
+.game-invisible {
+	display: none;
+}
+
+.game-container {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	
+	background-color: black;
+	color: white;
+}
+
 #box {
 	background-color: red;
 	width: 50px;

@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<title>Menu test</title>
+		
+		<link rel="stylesheet" href="menu-basic.css"/>
+	</head>
+	<body>
+		<button onclick="menuLib.show()">Show menu</button>
+		<div class="menu-container">
+			<div class="menu-content">Waiting first render...</div>
+		</div>
+		
+		<script src="menu-lib.js"></script>
+		<script>
+
+menuLib.component = document.getElementsByClassName("menu-content")[0];
+
+		</script>
+	<body>
+</html>

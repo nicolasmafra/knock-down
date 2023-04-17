@@ -3,6 +3,7 @@
 		<title>Looper test</title>
 	</head>
 	<body>
+		<button onclick="toggleLooper()">Start/Stop</button>
 		<div id="looper">Waiting first render...</div>
 		
 		<script src="looper.js"></script>
@@ -23,7 +24,15 @@ looper.renderFunction = () => {
 	div.innerHTML += '<br>Total time (s): ' + looper.totalTime/1000;
 	div.innerHTML += '<br>Ticks: ' + looper.ticks;
 }
-looper.start();
+
+function toggleLooper() {
+	if (looper.isRunning()) {
+		looper.stop();
+	} else {
+		looper.start();
+	}
+}
+
 
 		</script>
 	<body>
