@@ -3,13 +3,14 @@
 		<title>Looper test</title>
 	</head>
 	<body>
-		<button onclick="toggleLooper()">Start/Stop</button>
+		<button id="button">Start/Stop</button>
 		<div id="looper">Waiting first render...</div>
 		
-		<script src="looper.js"></script>
-		<script>
+		<script type="module">
+import looper from './looper.js';
 
 const div = document.getElementById("looper");
+document.getElementById("button").addEventListener("click", () => toggleLooper());
 
 looper.setFps(60);
 looper.saveFpsHistory = true;

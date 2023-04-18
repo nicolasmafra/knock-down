@@ -1,3 +1,7 @@
+import { gamepadKeyboard } from '../libs/gamepad-keyboard.js';
+import { gamepadProxy } from '../libs/gamepad-proxy.js';
+import looper from '../libs/looper.js';
+
 const game = {
 
 	fpsElement: document.getElementById('FPS'),
@@ -9,6 +13,7 @@ const game = {
 
 	configure: function() {
 		gamepadKeyboard.configure();
+		gamepadProxy.additionalGamepads.push(gamepadKeyboard.getGamepad());
 		looper.saveFpsHistory = true;
 		looper.renderFunction = (delta) => this.render(delta);
 	},
@@ -53,4 +58,4 @@ const game = {
 	},
 };
 
-game.configure();
+export default game;

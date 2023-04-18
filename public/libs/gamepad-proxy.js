@@ -55,13 +55,13 @@ const gamepadSchemas = [
 
 const gamepadProxy = {
 	
+	additionalGamepads: [],
+
 	getGamepads: function() {
 		let gamepads = navigator.getGamepads()
 			.map((gp, index) => this.mapGamepad(gp, index));
 		
-		if (gamepadKeyboard) {
-			gamepads.push(gamepadKeyboard.getGamepad());
-		}
+		gamepads.push(...this.additionalGamepads);
 		return gamepads.filter(gp => gp);
 	},
 	
@@ -120,3 +120,5 @@ const gamepadProxy = {
 	},
 	
 }
+
+export { gamepadSchemas, gamepadProxy }

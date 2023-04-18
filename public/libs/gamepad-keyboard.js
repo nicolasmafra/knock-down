@@ -95,3 +95,5 @@ const gamepadKeyboard = {
 		}
 	},
 };
+
+export { keyboardSchema, gamepadKeyboard }

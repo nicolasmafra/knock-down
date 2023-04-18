@@ -91,3 +91,5 @@ const looper = {
 		}
 	},
 };
+
+export default looper;

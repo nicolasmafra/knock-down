@@ -6,14 +6,17 @@
 	</head>
 	<body>
 
-		<button onclick="menuLib.show()">Show menu</button>
+		<button id="button">Show menu</button>
 
 		<div class="menu-container fixed-container">
 			<div class="menu-content absolute-center"></div>
 		</div>
 		
-		<script src="menu-lib.js"></script>
-		<script>
+		<script type="module">
+
+import menuLib from './menu-lib.js';
+
+document.getElementById("button").addEventListener("click", () => menuLib.show());
 
 menuLib.data = {
     title: "Main Menu",

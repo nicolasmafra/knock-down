@@ -70,3 +70,5 @@ const menuLib = {
         });
     },
 };
+
+export default menuLib;
