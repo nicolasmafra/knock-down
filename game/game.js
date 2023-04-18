@@ -1,6 +1,5 @@
 const game = {
 
-	container: document.getElementsByClassName("game-container")[0],
 	fpsElement: document.getElementById('FPS'),
 	boxElement: document.getElementById('box'),
 
@@ -15,8 +14,6 @@ const game = {
 	},
 
 	start: function() {
-        this.container.classList.remove('game-invisible');
-
 		this.boxPosition = [
 			window.innerWidth/2,
 			window.innerHeight/2,

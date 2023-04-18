@@ -1,32 +1,27 @@
-let menuData = {
-    title: "Main Menu",
-    children: {
-        "hide": {
-            title: "Hide main menu",
-            action: () => menuLib.hide(),
-        },
-        "level-list": {
-            title: "Select Level",
-            children: {
-                "hide": {
-                    title: "Hide select-level menu",
-                    action: () => menuLib.hide(),
-                },
-                "back": {
-                    title: "Back",
-                    action: () => menuLib.back(),
-                },
-            }
-        },
-    }
-};
-
 const menuLib = {
+    data: {
+        title: "Main Menu",
+        children: {}
+    },
     stack: [],
+    container: null,
     component: null,
     invisibleClass: 'menu-invisible',
     titleClass: 'menu-title',
     itemClass: 'menu-item',
+
+    start: function(container, component) {
+        if (!container) {
+            container = document.getElementsByClassName("menu-container")[0];
+        }
+        if (!component) {
+            component = document.getElementsByClassName("menu-content")[0];
+        }
+        this.container = container;
+        this.component = component;
+        this.render();
+        this.show();
+    },
 
     select: function(menuKey) {
         this.stack.push(menuKey);
@@ -39,18 +34,17 @@ const menuLib = {
     },
 
     currentMenu: function() {
-        let current = menuData;
+        let current = this.data;
         this.stack.forEach(menuKey => current = current.children[menuKey]);
         return current;
     },
 
     show: function() {
-        this.render();
-        this.component.classList.remove(this.invisibleClass);
+        this.container.style.display = null;
     },
 
     hide: function() {
-        this.component.classList.add(this.invisibleClass);
+        this.container.style.display = 'none';
     },
 
     render: function() {
