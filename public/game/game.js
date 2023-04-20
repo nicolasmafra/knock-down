@@ -8,7 +8,9 @@ const game = {
 	container: document.getElementsByClassName('game-container')[0],
 	fpsElement: document.getElementById('FPS'),
 
-	renderer: new THREE.WebGLRenderer(),
+	renderer: new THREE.WebGLRenderer({
+		antialias: true,
+	}),
 	scene: new THREE.Scene(),
 	camera: new THREE.PerspectiveCamera(),
 
