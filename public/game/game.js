@@ -12,8 +12,8 @@ const game = {
 	scene: new THREE.Scene(),
 	camera: new THREE.PerspectiveCamera(),
 
-	box: null,
-	boxMove: [0,0],
+	boxes: [],
+	tempMove: [0,0],
 	boxSpeed: 0.1,
 
 	configure: function() {
@@ -25,7 +25,20 @@ const game = {
 		this.resize();
 		window.onresize = () => this.resize();
 
+		this.scene.background = new THREE.Color("cyan");
+
+		const ambientlLight = new THREE.AmbientLight(0xffffff, 0.3);
+		this.scene.add(ambientlLight);
+
+		const directionalLight = new THREE.DirectionalLight(0xffffdd, 0.6);
+		directionalLight.position.set(0, 0.5, 1);
+		this.scene.add(directionalLight);
+
+		this.camera.position.set(0, -4, 6);
+		this.camera.lookAt(new THREE.Vector3());
+
 		this.container.appendChild(this.renderer.domElement);
+		this.renderer.render(this.scene, this.camera);
 	},
 
 	resize: function() {
@@ -36,20 +49,37 @@ const game = {
 	},
 
 	start: function() {
-		const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-		const material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-		this.box = new THREE.Mesh(geometry, material);
-		this.scene.add(this.box);
+		const plane = new THREE.Mesh(
+			new THREE.PlaneGeometry(7, 4),
+			new THREE.MeshLambertMaterial({ color: 0x00ff00 })
+		);
+		this.scene.add(plane);
 
-		this.scene.background = new THREE.Color("green");
-		this.camera.position.z = 5;
+		this.createBox(0x0000ff, 0, 0);
+		this.createBox(0xff00ff, 3, 1);
 		
 		looper.start();
+	},
+
+	createBox: function(color, x, y) {
+		if (!this.boxGeometry) {
+			this.boxGeometry = new THREE.BoxGeometry( 0.5, 0.5, 1 );
+		}
+		const box = new THREE.Mesh(
+			this.boxGeometry,
+			new THREE.MeshLambertMaterial({ color })
+		);
+		box.position.set(x, y, 0.5);
+		this.scene.add(box);
+
+		this.boxes.push(box);
 	},
 	
 	render: function(delta) {
 		this.updateGui();
-		this.moveBox();
+
+		this.boxes.forEach((box, i) => this.moveBox(box, i));
+
 		this.renderer.render(this.scene, this.camera);
 	},
 
@@ -59,19 +89,19 @@ const game = {
 		}
 	},
 
-	moveBox: function() {
-		this.boxMove[0] = 0;
-		this.boxMove[1] = 0;
+	moveBox: function(box, gamepadIndex) {
+		this.tempMove[0] = 0;
+		this.tempMove[1] = 0;
 		
-		const gamepad = gamepadProxy.getGamepads()[0];
+		const gamepad = gamepadProxy.getGamepads()[gamepadIndex];
 		if (gamepad) {
-			this.boxMove[0] += gamepad.buttons[15].value - gamepad.buttons[14].value + gamepad.axes[0];
-			this.boxMove[1] -= gamepad.buttons[13].value - gamepad.buttons[12].value + gamepad.axes[1];
+			this.tempMove[0] += gamepad.buttons[15].value - gamepad.buttons[14].value + gamepad.axes[0];
+			this.tempMove[1] -= gamepad.buttons[13].value - gamepad.buttons[12].value + gamepad.axes[1];
 			
-			gamepadProxy.normalizeAxisPair(this.boxMove);
+			gamepadProxy.normalizeAxisPair(this.tempMove);
 			
-			this.box.position.x += this.boxSpeed * this.boxMove[0];
-			this.box.position.y += this.boxSpeed * this.boxMove[1];
+			box.position.x += this.boxSpeed * this.tempMove[0];
+			box.position.y += this.boxSpeed * this.tempMove[1];
 		}
 	},
 };
