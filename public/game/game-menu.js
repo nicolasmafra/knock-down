@@ -6,9 +6,17 @@ const gameMenu = {
         menuLib.data = {
             title: "Easy Game dev",
             children: {
-                "play": {
-                    title: "Play Game",
-                    action: () => this.playGame(),
+                "1-player": {
+                    title: "1 Player",
+                    action: () => this.playGame(1),
+                },
+                "2-players": {
+                    title: "2 Players",
+                    action: () => this.playGame(2),
+                },
+                "3-players": {
+                    title: "3 Players",
+                    action: () => this.playGame(3),
                 },
             }
         };
@@ -18,7 +26,8 @@ const gameMenu = {
         menuLib.start();
     },
 
-    playGame: function() {
+    playGame: function(playerCount) {
+        game.playerCount = playerCount;
         menuLib.hide();
         game.start();
     },

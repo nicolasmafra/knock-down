@@ -12,6 +12,7 @@ const game = {
 	scene: new THREE.Scene(),
 	camera: new THREE.PerspectiveCamera(),
 
+	playerCount: 2,
 	boxes: [],
 	tempMove: [0,0],
 	boxSpeed: 0.1,
@@ -56,7 +57,8 @@ const game = {
 		this.scene.add(plane);
 
 		this.createBox(0x0000ff, 0, 0);
-		this.createBox(0xff00ff, 3, 1);
+		if (this.playerCount >= 2) this.createBox(0xff00ff, 3, 1);
+		if (this.playerCount >= 3) this.createBox(0xff0000, -3, -1);
 		
 		looper.start();
 	},
