@@ -5,7 +5,6 @@ const gameInput = {
 
     playersInput: [
         {
-            gamepadId: null,
             move: [0,0]
         }
     ],
@@ -16,12 +15,9 @@ const gameInput = {
     },
 
     start: function(playerCount) {
-        const gamepads = gamepadProxy.getGamepads();
         this.playersInput = [];
         for (var i = 0; i < playerCount; i++) {
-            let gamepad = gamepads[i];
             this.playersInput.push({
-                gamepadId: gamepad ? gamepad.id : null,
                 move: [ 0, 0 ]
             });
         }
@@ -29,8 +25,8 @@ const gameInput = {
 
 	listen: function() {
         const gamepads = gamepadProxy.getGamepads();
-        this.playersInput.forEach(input => {
-            const gamepad = gamepads.find(g => g.id = input.gamepadId);
+        this.playersInput.forEach((input, i) => {
+            let gamepad = gamepads[i];
             this.listenInput(input, gamepad);
         });
 	},

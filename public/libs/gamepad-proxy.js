@@ -61,8 +61,7 @@ const gamepadProxy = {
 		let gamepads = navigator.getGamepads()
 			.map((gp, index) => this.mapGamepad(gp, index));
 		
-		gamepads.push(...this.additionalGamepads);
-		return gamepads.filter(gp => gp);
+		return [ ...gamepads.filter(gp => gp), ...this.additionalGamepads ];
 	},
 	
 	normalizeAxisPair: function(array) {
