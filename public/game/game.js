@@ -16,8 +16,9 @@ const game = {
 	playerCount: 2,
 	boxes: [],
 	tempMove: [0,0],
-	boxSpeed: 3.0,
+	boxAcceleration: 3.0,
 	boxJumpSpeed: 5.0,
+	groundFriction: 0.01,
 	gravity: 9.8,
 	timeUnit: 0.02,
 
@@ -101,14 +102,17 @@ const game = {
 	},
 
 	moveBox: function(box, input) {
-		box.position.x += input.move[0] * this.boxSpeed * this.timeUnit;
-		box.position.y += input.move[1] * this.boxSpeed * this.timeUnit;
-		box.position.z += box.userData.velocity.z * this.timeUnit;
+		box.position.addScaledVector(box.userData.velocity, this.timeUnit);
+
+		box.userData.velocity.x += input.move[0] * this.boxAcceleration * this.timeUnit;
+		box.userData.velocity.y += input.move[1] * this.boxAcceleration * this.timeUnit;
+		let z = box.userData.velocity.z - this.gravity * this.timeUnit;
+		box.userData.velocity.multiplyScalar(1 - this.groundFriction);
+		box.userData.velocity.z = z;
+
 		if (box.position.z <= 0.5) {
 			box.position.z = 0.5;
 			box.userData.velocity.z = input.jump ? this.boxJumpSpeed : 0;
-		} else {
-			box.userData.velocity.z -= this.gravity * this.timeUnit;
 		}
 	},
 };
