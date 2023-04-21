@@ -1,3 +1,4 @@
+import gameGfx from './game-gfx.js';
 import gameInput from './game-input.js';
 import gamePhysics from './game-physics.js';
 import looper from '../libs/looper.js';
@@ -7,12 +8,6 @@ const game = {
 
 	container: document.getElementsByClassName('game-container')[0],
 	fpsElement: document.getElementById('FPS'),
-
-	renderer: new THREE.WebGLRenderer({
-		antialias: true,
-	}),
-	scene: new THREE.Scene(),
-	camera: new THREE.PerspectiveCamera(),
 
 	playerCount: 2,
 	boxes: [],
@@ -25,30 +20,16 @@ const game = {
 		looper.saveFpsHistory = true;
 		looper.renderFunction = (delta) => this.render(delta);
 
-		this.resize();
-		window.onresize = () => this.resize();
+		gameGfx.configure(this.container);
 
-		this.scene.background = new THREE.Color("cyan");
+        gameGfx.addAmbientLight();
 
-		const ambientlLight = new THREE.AmbientLight(0xffffff, 0.3);
-		this.scene.add(ambientlLight);
+        gameGfx.addDirectionalLight();
 
-		const directionalLight = new THREE.DirectionalLight(0xffffdd, 0.6);
-		directionalLight.position.set(0, 0.5, 1);
-		this.scene.add(directionalLight);
-
-		this.camera.position.set(0, -8, 9);
-		this.camera.lookAt(new THREE.Vector3());
-
-		this.container.appendChild(this.renderer.domElement);
-		this.renderer.render(this.scene, this.camera);
-	},
-
-	resize: function() {
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
-
-		this.camera.aspect = window.innerWidth / window.innerHeight;
-		this.camera.updateProjectionMatrix();
+		gameGfx.camera.position.set(0, -8, 9);
+		gameGfx.camera.lookAt(new THREE.Vector3());
+        
+		gameGfx.render();
 	},
 
 	start: function() {
@@ -58,7 +39,7 @@ const game = {
 			new THREE.PlaneGeometry(10, 10),
 			new THREE.MeshLambertMaterial({ color: 0x00ff00 })
 		);
-		this.scene.add(plane);
+		gameGfx.scene.add(plane);
 
 		this.createBox(0x0000ff, 0, 0);
 		if (this.playerCount >= 2) this.createBox(0xff00ff, 3, 1);
@@ -79,7 +60,7 @@ const game = {
 		box.userData = {
 			velocity: new THREE.Vector3()
 		};
-		this.scene.add(box);
+		gameGfx.scene.add(box);
 
 		this.boxes.push(box);
 	},
@@ -90,7 +71,7 @@ const game = {
 		gameInput.listen();
 		this.boxes.forEach((box, i) => this.moveBox(box, gameInput.playersInput[i]));
 
-		this.renderer.render(this.scene, this.camera);
+		gameGfx.render();
 	},
 
 	updateGui: function() {
