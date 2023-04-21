@@ -1,4 +1,5 @@
 import gameInput from './game-input.js';
+import gamePhysics from './game-physics.js';
 import looper from '../libs/looper.js';
 import * as THREE from 'three';
 
@@ -16,11 +17,8 @@ const game = {
 	playerCount: 2,
 	boxes: [],
 	tempMove: [0,0],
-	boxAcceleration: 3.0,
-	boxJumpSpeed: 5.0,
-	groundFriction: 0.01,
-	gravity: 9.8,
-	timeUnit: 0.02,
+	boxAcceleration: 10.0,
+	boxJumpSpeed: 4.5,
 
 	configure: function() {
 		gameInput.configure();
@@ -39,7 +37,7 @@ const game = {
 		directionalLight.position.set(0, 0.5, 1);
 		this.scene.add(directionalLight);
 
-		this.camera.position.set(0, -4, 6);
+		this.camera.position.set(0, -8, 9);
 		this.camera.lookAt(new THREE.Vector3());
 
 		this.container.appendChild(this.renderer.domElement);
@@ -57,7 +55,7 @@ const game = {
 		gameInput.start(this.playerCount);
 
 		const plane = new THREE.Mesh(
-			new THREE.PlaneGeometry(7, 4),
+			new THREE.PlaneGeometry(10, 10),
 			new THREE.MeshLambertMaterial({ color: 0x00ff00 })
 		);
 		this.scene.add(plane);
@@ -71,7 +69,7 @@ const game = {
 
 	createBox: function(color, x, y) {
 		if (!this.boxGeometry) {
-			this.boxGeometry = new THREE.BoxGeometry( 0.5, 0.5, 1 );
+			this.boxGeometry = new THREE.BoxGeometry( 0.8, 0.8, 1.7 );
 		}
 		const box = new THREE.Mesh(
 			this.boxGeometry,
@@ -102,18 +100,16 @@ const game = {
 	},
 
 	moveBox: function(box, input) {
-		box.position.addScaledVector(box.userData.velocity, this.timeUnit);
 
-		box.userData.velocity.x += input.move[0] * this.boxAcceleration * this.timeUnit;
-		box.userData.velocity.y += input.move[1] * this.boxAcceleration * this.timeUnit;
-		let z = box.userData.velocity.z - this.gravity * this.timeUnit;
-		box.userData.velocity.multiplyScalar(1 - this.groundFriction);
-		box.userData.velocity.z = z;
+		gamePhysics.applyInertia(box);
 
-		if (box.position.z <= 0.5) {
-			box.position.z = 0.5;
+		gamePhysics.applyGround(box, () => {
+			box.userData.velocity.x += input.move[0] * this.boxAcceleration * gamePhysics.timeUnit;
+			box.userData.velocity.y += input.move[1] * this.boxAcceleration * gamePhysics.timeUnit;
 			box.userData.velocity.z = input.jump ? this.boxJumpSpeed : 0;
-		}
+		});
+
+		gamePhysics.clampHorizontal(box, -5, 5);
 	},
 };
 
