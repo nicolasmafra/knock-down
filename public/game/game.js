@@ -16,7 +16,10 @@ const game = {
 	playerCount: 2,
 	boxes: [],
 	tempMove: [0,0],
-	boxSpeed: 0.1,
+	boxSpeed: 3.0,
+	boxJumpSpeed: 5.0,
+	gravity: 9.8,
+	timeUnit: 0.02,
 
 	configure: function() {
 		gameInput.configure();
@@ -74,6 +77,9 @@ const game = {
 			new THREE.MeshLambertMaterial({ color })
 		);
 		box.position.set(x, y, 0.5);
+		box.userData = {
+			velocity: new THREE.Vector3()
+		};
 		this.scene.add(box);
 
 		this.boxes.push(box);
@@ -95,8 +101,15 @@ const game = {
 	},
 
 	moveBox: function(box, input) {
-		box.position.x += this.boxSpeed * input.move[0];
-		box.position.y += this.boxSpeed * input.move[1];
+		box.position.x += input.move[0] * this.boxSpeed * this.timeUnit;
+		box.position.y += input.move[1] * this.boxSpeed * this.timeUnit;
+		box.position.z += box.userData.velocity.z * this.timeUnit;
+		if (box.position.z <= 0.5) {
+			box.position.z = 0.5;
+			box.userData.velocity.z = input.jump ? this.boxJumpSpeed : 0;
+		} else {
+			box.userData.velocity.z -= this.gravity * this.timeUnit;
+		}
 	},
 };
 

@@ -5,7 +5,8 @@ const gameInput = {
 
     playersInput: [
         {
-            move: [0,0]
+            move: [0,0],
+            jump: false,
         }
     ],
 
@@ -18,7 +19,8 @@ const gameInput = {
         this.playersInput = [];
         for (var i = 0; i < playerCount; i++) {
             this.playersInput.push({
-                move: [ 0, 0 ]
+                move: [ 0, 0 ],
+                jump: false,
             });
         }
     },
@@ -34,10 +36,12 @@ const gameInput = {
     listenInput(input, gamepad) {
         input.move[0] = 0;
         input.move[1] = 0;
+        input.jump = false;
 
         if (gamepad) {
             input.move[0] += gamepad.buttons[15].value - gamepad.buttons[14].value + gamepad.axes[0];
             input.move[1] -= gamepad.buttons[13].value - gamepad.buttons[12].value + gamepad.axes[1];
+            input.jump = gamepad.buttons[0].value;
             
             gamepadProxy.normalizeAxisPair(input.move);
         }
