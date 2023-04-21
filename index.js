@@ -8,5 +8,5 @@ const server = http.createServer(app);
 
 app.use(express.static('public'));
 server.listen(port, () => {
-  console.log('listening on *:' + port);
+  console.log('listening on http://localhost:' + port);
 });

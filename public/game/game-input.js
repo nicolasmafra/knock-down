@@ -30,7 +30,7 @@ const gameInput = {
 	listen: function() {
         const gamepads = gamepadProxy.getGamepads();
         this.playersInput.forEach(input => {
-            const gamepad = gamepads.filter(g => g.id = input.gamepadId);
+            const gamepad = gamepads.find(g => g.id = input.gamepadId);
             this.listenInput(input, gamepad);
         });
 	},

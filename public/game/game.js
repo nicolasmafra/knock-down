@@ -1,5 +1,4 @@
-import { gamepadKeyboard } from '../libs/gamepad-keyboard.js';
-import { gamepadProxy } from '../libs/gamepad-proxy.js';
+import gameInput from './game-input.js';
 import looper from '../libs/looper.js';
 import * as THREE from 'three';
 
@@ -20,8 +19,7 @@ const game = {
 	boxSpeed: 0.1,
 
 	configure: function() {
-		gamepadKeyboard.configure();
-		gamepadProxy.additionalGamepads.push(gamepadKeyboard.getGamepad());
+		gameInput.configure();
 		looper.saveFpsHistory = true;
 		looper.renderFunction = (delta) => this.render(delta);
 
@@ -52,6 +50,8 @@ const game = {
 	},
 
 	start: function() {
+		gameInput.start(this.playerCount);
+
 		const plane = new THREE.Mesh(
 			new THREE.PlaneGeometry(7, 4),
 			new THREE.MeshLambertMaterial({ color: 0x00ff00 })
@@ -82,7 +82,8 @@ const game = {
 	render: function(delta) {
 		this.updateGui();
 
-		this.boxes.forEach((box, i) => this.moveBox(box, i));
+		gameInput.listen();
+		this.boxes.forEach((box, i) => this.moveBox(box, gameInput.playersInput[i]));
 
 		this.renderer.render(this.scene, this.camera);
 	},
@@ -93,20 +94,9 @@ const game = {
 		}
 	},
 
-	moveBox: function(box, gamepadIndex) {
-		this.tempMove[0] = 0;
-		this.tempMove[1] = 0;
-		
-		const gamepad = gamepadProxy.getGamepads()[gamepadIndex];
-		if (gamepad) {
-			this.tempMove[0] += gamepad.buttons[15].value - gamepad.buttons[14].value + gamepad.axes[0];
-			this.tempMove[1] -= gamepad.buttons[13].value - gamepad.buttons[12].value + gamepad.axes[1];
-			
-			gamepadProxy.normalizeAxisPair(this.tempMove);
-			
-			box.position.x += this.boxSpeed * this.tempMove[0];
-			box.position.y += this.boxSpeed * this.tempMove[1];
-		}
+	moveBox: function(box, input) {
+		box.position.x += this.boxSpeed * input.move[0];
+		box.position.y += this.boxSpeed * input.move[1];
 	},
 };
 
