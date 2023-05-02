@@ -1,5 +1,10 @@
 import * as THREE from 'three';
 
+const outlineMaterial = new THREE.MeshBasicMaterial({
+	color: 0x000000,
+	side: THREE.BackSide,
+});
+
 const gameGfx = {
 
 	renderer: new THREE.WebGLRenderer({
@@ -13,8 +18,6 @@ const gameGfx = {
 
 		this.resize();
 		window.onresize = () => this.resize();
-
-		this.scene.background = new THREE.Color("cyan");
     },
 
 	resize: function() {
@@ -22,6 +25,17 @@ const gameGfx = {
 
 		this.camera.aspect = window.innerWidth / window.innerHeight;
 		this.camera.updateProjectionMatrix();
+	},
+	
+	addObject: function(object) {
+		this.scene.add(object.mesh);
+		this.addOutline(object.mesh);
+	},
+
+	addOutline: function(mesh) {
+		const outline = new THREE.Mesh(mesh.geometry, outlineMaterial);
+		outline.scale.multiplyScalar(1.05);
+		mesh.add(outline);
 	},
 
     addAmbientLight: function() {

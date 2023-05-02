@@ -87,10 +87,9 @@ const looper = {
 				try {
 					this.renderFunction(this.delta, this.totalTime);
 				} catch (e) {
+					console.error("Error inside renderFunction", e);
 					if (this.exceptionFunction) {
-						this.exceptionFunction();
-					} else {
-						console.error("Error inside renderFunction", e);
+						this.exceptionFunction(e);
 					}
 					if (!this.continueOnException) {
 						this.stop();

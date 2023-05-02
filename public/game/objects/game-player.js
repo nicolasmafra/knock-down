@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon';
-import gamePhysics from '../game-physics.js';
+
+import gamePhysics from '../engine/game-physics.js';
+import gameInput from '../engine/game-input.js';
 
 const width = 0.8;
 const height = 1.7;
@@ -19,8 +21,9 @@ export default class GamePlayer {
 
   bodyBelow = null;
 
-  constructor(input, color, x, y) {
-    this.input = input;
+  constructor(index, color, x, y) {
+    this.index = index;
+    this.input = gameInput.playersInput[index];
     this.#createBody(x, y);
     this.#createMesh(color);
 
@@ -53,6 +56,12 @@ export default class GamePlayer {
   }
 
   update() {
+    if (this.input) {
+      this.#applyInput();
+    }
+  }
+
+  #applyInput() {
     this.#fixBodyBelow();
     if (this.bodyBelow) {
       this.#move();

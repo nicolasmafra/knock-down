@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon';
-import gamePhysics from '../game-physics.js';
+import gamePhysics from '../engine/game-physics.js';
 
 export default class GameGround {
   body = null;
@@ -13,6 +13,8 @@ export default class GameGround {
   }
 
   #createBody(size, position) {
+    if (!position) position = new CANNON.Vec3();
+    
     this.body = new CANNON.Body({
       type: CANNON.Body.STATIC,
       material: gamePhysics.material,

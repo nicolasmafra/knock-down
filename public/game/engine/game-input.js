@@ -1,5 +1,5 @@
-import { gamepadKeyboard } from '../libs/gamepad-keyboard.js';
-import { gamepadProxy } from '../libs/gamepad-proxy.js';
+import { gamepadKeyboard } from '../../libs/gamepad-keyboard.js';
+import { gamepadProxy } from '../../libs/gamepad-proxy.js';
 
 const gameInput = {
 
