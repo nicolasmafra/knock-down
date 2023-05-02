@@ -35,6 +35,11 @@ const gameGfx = {
 		this.scene.add(directionalLight);
     },
 
+	resetCamera: function() {
+		this.camera.position.set(0, -8, 9);
+		this.camera.lookAt(new THREE.Vector3());
+	},
+
     render: function() {
 		this.renderer.render(this.scene, this.camera);
     },

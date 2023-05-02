@@ -3,6 +3,8 @@ const looper = {
 	period: 1000/60,
 	requestBeforeRender: false,
 	renderFunction: null,
+	continueOnException: false,
+	exceptionFunction: null,
 	
 	requestAnimationFrameId: null,
 	
@@ -82,7 +84,19 @@ const looper = {
 			}
 		
 			if (this.renderFunction) {
-				this.renderFunction(this.delta, this.totalTime);
+				try {
+					this.renderFunction(this.delta, this.totalTime);
+				} catch (e) {
+					if (this.exceptionFunction) {
+						this.exceptionFunction();
+					} else {
+						console.error("Error inside renderFunction", e);
+					}
+					if (!this.continueOnException) {
+						this.stop();
+						return;
+					}
+				}
 			}
 		}
 		

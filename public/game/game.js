@@ -2,6 +2,9 @@ import gameGfx from './game-gfx.js';
 import gameInput from './game-input.js';
 import gamePhysics from './game-physics.js';
 import looper from '../libs/looper.js';
+
+import GamePlayer from './objects/game-player.js';
+import GameGround from './objects/game-ground.js';
 import * as THREE from 'three';
 
 const game = {
@@ -10,10 +13,8 @@ const game = {
 	fpsElement: document.getElementById('FPS'),
 
 	playerCount: 2,
-	boxes: [],
+	players: [],
 	tempMove: [0,0],
-	boxAcceleration: 10.0,
-	boxJumpSpeed: 4.5,
 
 	configure: function() {
 		gameInput.configure();
@@ -26,71 +27,61 @@ const game = {
 
         gameGfx.addDirectionalLight();
 
-		gameGfx.camera.position.set(0, -8, 9);
-		gameGfx.camera.lookAt(new THREE.Vector3());
+		gameGfx.resetCamera();
         
 		gameGfx.render();
+
+		gamePhysics.configure();
+	},
+
+	addToGame: function(object) {
+	  gamePhysics.world.addBody(object.body);
+	  gameGfx.scene.add(object.mesh);
 	},
 
 	start: function() {
 		gameInput.start(this.playerCount);
 
-		const plane = new THREE.Mesh(
-			new THREE.PlaneGeometry(10, 10),
-			new THREE.MeshLambertMaterial({ color: 0x00ff00 })
-		);
-		gameGfx.scene.add(plane);
+		this.addStaticBlocks();
 
-		this.createBox(0x0000ff, 0, 0);
-		if (this.playerCount >= 2) this.createBox(0xff00ff, 3, 1);
-		if (this.playerCount >= 3) this.createBox(0xff0000, -3, -1);
+		this.createPlayer(0, 0x0000ff, 0, 0);
+		if (this.playerCount >= 2) this.createPlayer(1, 0xff00ff, 3, 1);
+		if (this.playerCount >= 3) this.createPlayer(2, 0xff0000, -3, -1);
 		
 		looper.start();
 	},
 
-	createBox: function(color, x, y) {
-		if (!this.boxGeometry) {
-			this.boxGeometry = new THREE.BoxGeometry( 0.8, 0.8, 1.7 );
-		}
-		const box = new THREE.Mesh(
-			this.boxGeometry,
-			new THREE.MeshLambertMaterial({ color })
-		);
-		box.position.set(x, y, 0.5);
-		box.userData = {
-			velocity: new THREE.Vector3()
-		};
-		gameGfx.scene.add(box);
+	addStaticBlocks: function() {
+		this.addToGame(new GameGround(new THREE.Vector3(10, 10, 0.2), new THREE.Vector3(0, 0, 0.1)));
+		const wallHeight = 2.0;
+		this.addToGame(new GameGround(new THREE.Vector3(1, 10, wallHeight), new THREE.Vector3(-5.5, 0, wallHeight/2)));
+		this.addToGame(new GameGround(new THREE.Vector3(1, 10, wallHeight), new THREE.Vector3(5.5, 0, wallHeight/2)));
+		this.addToGame(new GameGround(new THREE.Vector3(10, 1, wallHeight), new THREE.Vector3(0, 5.5, wallHeight/2)));
+		this.addToGame(new GameGround(new THREE.Vector3(10, 1, wallHeight), new THREE.Vector3(0, -5.5, wallHeight/2)));
+	},
 
-		this.boxes.push(box);
+	createPlayer: function(index, color, x, y) {
+		const player = new GamePlayer(gameInput.playersInput[index], color, x, y);
+		this.addToGame(player);
+		this.players.push(player);
 	},
 	
 	render: function(delta) {
-		this.updateGui();
-
 		gameInput.listen();
-		this.boxes.forEach((box, i) => this.moveBox(box, gameInput.playersInput[i]));
+
+		this.players.forEach(player => player.update());
+
+		gamePhysics.update();
 
 		gameGfx.render();
+		
+		this.updateGui();
 	},
 
 	updateGui: function() {
 		if (looper.ticks % 15 == 0) {
 			this.fpsElement.innerHTML = looper.getFpsAverage().toFixed(2);
 		}
-	},
-
-	moveBox: function(box, input) {
-
-		gamePhysics.applyInertia(box);
-
-		gamePhysics.applyGround(box, () => {
-			box.userData.velocity.x += input.move[0] * this.boxAcceleration * gamePhysics.timeUnit;
-			box.userData.velocity.y += input.move[1] * this.boxAcceleration * gamePhysics.timeUnit;
-			box.userData.velocity.z = input.jump ? this.boxJumpSpeed : 0;
-		});
-
-		gamePhysics.clampHorizontal(box, -5, 5);
 	},
 };
 
