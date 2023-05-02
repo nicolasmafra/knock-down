@@ -4,11 +4,14 @@ const menuLib = {
         children: {}
     },
     stack: [],
+    stackMin: 0,
     container: null,
     component: null,
     invisibleClass: 'menu-invisible',
     titleClass: 'menu-title',
     itemClass: 'menu-item',
+    selectedClass: 'menu-selected',
+    selected: -1,
 
     start: function(container, component) {
         if (!container) {
@@ -23,13 +26,35 @@ const menuLib = {
         this.show();
     },
 
+    moveDown: function() {
+        if (!this.component.children) return;
+        this.selected = (this.selected + 1) % this.getMenuItems().length;
+        this.renderSelected();
+    },
+
+    moveUp: function() {
+        if (!this.component.children) return;
+        this.selected = (this.selected - 1) % this.getMenuItems().length;
+        this.renderSelected();
+    },
+
     select: function(menuKey) {
         let current = this.currentMenu();
+        if (!menuKey && current.children) {
+            menuKey = Object.keys(current.children)[this.selected];
+        }
+        if (!menuKey) return;
+        
         if (!current.children || !current.children[menuKey]) {
             throw new Error("Invalid menu: " + menuKey);
         }
-        this.stack.push(menuKey);
-        this.render();
+        let child = current.children[menuKey];
+        if (child.action) {
+            child.action();
+        } else {
+            this.stack.push(menuKey);
+            this.render();
+        }
     },
 
     setCurrentMenu(stack) {
@@ -38,6 +63,8 @@ const menuLib = {
     },
 
     back: function() {
+        if (this.stack.length <= this.stackMin) return;
+        
         this.stack.pop();
         this.render();
     },
@@ -61,6 +88,7 @@ const menuLib = {
     },
 
     render: function() {
+        this.selected = -1;
         let current = this.currentMenu();
         this.component.innerHTML = '';
 
@@ -84,6 +112,29 @@ const menuLib = {
 
             this.component.appendChild(element);
         });
+    },
+
+    renderSelected: function() {
+        if (!this.component.children) return;
+
+        this.getMenuItems().forEach((element,i) => {
+            if (i == this.selected) {
+                element.classList.add(this.selectedClass);
+            } else {
+                element.classList.remove(this.selectedClass);
+            }
+        });
+    },
+
+    getMenuItems: function() {
+        let menuItems = [];
+        for (var i = 0; i < this.component.children.length; i++) {
+            let element = this.component.children[i];
+            if (element.classList.contains(this.itemClass)) {
+                menuItems.push(element);
+            }
+        }
+        return menuItems;
     },
 };
 

@@ -25,6 +25,7 @@ export default class GamePlayer {
 
   constructor(index, color, x, y) {
     this.index = index;
+    this.name = "Player" + (index + 1);
     this.input = gameInput.playersInput[index];
     this.#createBody(x, y);
     this.#createMesh(color);

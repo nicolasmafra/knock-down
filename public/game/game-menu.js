@@ -3,6 +3,7 @@ import game from './game.js';
 
 const gameMenu = {
     configure: function() {
+        menuLib.stackMin = 1;
         menuLib.data = {
             title: "root",
             children: {

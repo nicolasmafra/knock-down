@@ -12,12 +12,11 @@ const gameEngine = {
     playerCount: 1,
 	players: [],
 	minPlayerCount: 1,
+	running: false,
 
 	configure: function() {
 		gameInput.configure();
 		looper.saveFpsHistory = true;
-		looper.renderFunction = (delta) => this.update(delta);
-        looper.exceptionFunction = (e) => this.showMessage("Error: " + e.message);
 
 		gameGfx.configure(this.container);
 	},
@@ -52,7 +51,7 @@ const gameEngine = {
 
 	start: function() {
 		this.minPlayerCount = this.playerCount == 1 ? 1 : 2;
-		looper.start();
+		this.running = true;
 	},
 	
 	update: function(delta) {
@@ -68,7 +67,7 @@ const gameEngine = {
 		if (this.players.length < this.minPlayerCount) {
 			if (this.players.length == 1) {
 				const winner = this.players[0];
-				this.showMessage("Winner: Player" + winner.index);
+				this.showMessage("Winner: " + winner.name);
 			} else {
 				this.showMessage("No one win :(");
 			}
@@ -100,7 +99,7 @@ const gameEngine = {
 	},
 
 	stop: function() {
-		looper.stop();
+		this.running = false;
 		//gameMenu.show();
 	},
 };

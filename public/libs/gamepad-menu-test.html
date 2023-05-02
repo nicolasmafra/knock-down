@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<title>Gamepad Menu test</title>
+		
+		<link rel="stylesheet" href="menu-basic.css"/>
+	</head>
+	<body>
+
+		<div class="menu-container fixed-container">
+			<div class="menu-content absolute-center"></div>
+		</div>
+		
+		<script type="module">
+
+import menuLib from './menu-lib.js';
+import looper from './looper.js';
+import gamepadMenu from './gamepad-menu.js';
+
+looper.renderFunction = () => gamepadMenu.checkMenuInput();
+
+menuLib.data = {
+    title: "Main Menu",
+    children: {
+        "level-list": {
+            title: "Select Level",
+            children: {
+                "x": {
+                    title: "Something",
+                    action: () => menuLib.back(),
+                },
+                "back": {
+                    title: "Back",
+                    action: () => menuLib.back(),
+                },
+            }
+        },
+        "config-list": {
+            title: "Configurations",
+            children: {
+                "x": {
+                    title: "Something",
+                    action: () => menuLib.back(),
+                },
+                "back": {
+                    title: "Back",
+                    action: () => menuLib.back(),
+                },
+            }
+        },
+    }
+};
+menuLib.start();
+looper.start();
+
+		</script>
+	<body>
+</html>

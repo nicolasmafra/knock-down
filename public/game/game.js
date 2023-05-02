@@ -1,4 +1,6 @@
+import looper from '../../libs/looper.js';
 import gameEngine from './engine/game-engine.js';
+import gamepadMenu from '../../libs/gamepad-menu.js';
 
 import GameScenario from './objects/game-scenario.js';
 import GamePlayer from './objects/game-player.js';
@@ -11,6 +13,10 @@ const game = {
 
 	configure: function() {
 		gameEngine.configure();
+		looper.saveFpsHistory = true;
+		looper.renderFunction = (delta) => this.update(delta);
+        looper.exceptionFunction = (e) => this.showMessage("Error: " + e.message);
+		looper.start();
 	},
 
 	start: function() {
@@ -28,6 +34,13 @@ const game = {
 		gameEngine.playerCount = this.playerCount;
 		gameEngine.players = this.players;
 		gameEngine.start();
+	},
+
+	update: function(delta) {
+		gamepadMenu.checkMenuInput();
+		if (gameEngine.running) {
+			gameEngine.update(delta);
+		}
 	},
 
 	createPlayer: function(index, color, x, y) {
