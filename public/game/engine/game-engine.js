@@ -2,6 +2,7 @@ import gameGfx from './game-gfx.js';
 import gameInput from './game-input.js';
 import gamePhysics from './game-physics.js';
 import looper from '../../libs/looper.js';
+import gameMenu from '../game-menu.js';
 
 const gameEngine = {
 
@@ -10,6 +11,7 @@ const gameEngine = {
 
     playerCount: 1,
 	players: [],
+	minPlayerCount: 1,
 
 	configure: function() {
 		gameInput.configure();
@@ -18,16 +20,6 @@ const gameEngine = {
         looper.exceptionFunction = (e) => alert("Error: " + e.message);
 
 		gameGfx.configure(this.container);
-
-        gameGfx.addAmbientLight();
-
-        gameGfx.addDirectionalLight();
-
-		gameGfx.resetCamera();
-        
-		gameGfx.render();
-
-		gamePhysics.configure();
 	},
 
 	addToGame: function(object) {
@@ -39,11 +31,27 @@ const gameEngine = {
 		if (object.mesh) gameGfx.addObject(object);
 	},
 
+	removeFromGame: function(object) {
+		if (object.body) gamePhysics.world.removeBody(object.body);
+		if (object.mesh) gameGfx.removeObject(object);
+	},
+
 	preStart: function() {
+		gameGfx.start();
+		gamePhysics.start();
 		gameInput.start(this.playerCount);
+
+        gameGfx.addAmbientLight();
+
+        gameGfx.addDirectionalLight();
+
+		gameGfx.resetCamera();
+        
+		gameGfx.render();
 	},
 
 	start: function() {
+		this.minPlayerCount = this.playerCount == 1 ? 1 : 2;
 		looper.start();
 	},
 	
@@ -51,6 +59,16 @@ const gameEngine = {
 		gameInput.listen();
 
 		this.players.forEach(player => player.update());
+
+		this.players.forEach(player => {
+			if (player.fallen) {
+				this.removePlayer(player);
+			}
+		});
+		if (this.players.length < this.minPlayerCount) {
+			this.stop();
+			return;
+		}
 
 		gamePhysics.update();
 
@@ -63,6 +81,17 @@ const gameEngine = {
 		if (looper.ticks % 15 == 0) {
 			this.fpsElement.innerHTML = looper.getFpsAverage().toFixed(2);
 		}
+	},
+
+	removePlayer: function(player) {
+		console.log("Player " + player.index + " falled.");
+		this.removeFromGame(player);
+		this.players = this.players.filter(p => p != player);
+	},
+
+	stop: function() {
+		looper.stop();
+		gameMenu.show();
 	},
 };
 

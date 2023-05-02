@@ -10,26 +10,37 @@ const gameGfx = {
 	renderer: new THREE.WebGLRenderer({
 		antialias: true,
 	}),
-	scene: new THREE.Scene(),
-	camera: new THREE.PerspectiveCamera(),
+	scene: null,
+	camera: null,
 
     configure: function(container) {
 		container.appendChild(this.renderer.domElement);
 
-		this.resize();
 		window.onresize = () => this.resize();
     },
+
+	start: function() {
+		this.scene = new THREE.Scene();
+		this.camera = new THREE.PerspectiveCamera();
+		this.resize();
+	},
 
 	resize: function() {
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
 
-		this.camera.aspect = window.innerWidth / window.innerHeight;
-		this.camera.updateProjectionMatrix();
+		if (this.camera) {
+			this.camera.aspect = window.innerWidth / window.innerHeight;
+			this.camera.updateProjectionMatrix();
+		}
 	},
 	
 	addObject: function(object) {
 		this.scene.add(object.mesh);
 		this.addOutline(object.mesh);
+	},
+
+	removeObject: function(object) {
+		this.scene.remove(object.mesh);
 	},
 
 	addOutline: function(mesh) {

@@ -31,6 +31,10 @@ const gameMenu = {
         menuLib.hide();
         game.start();
     },
+
+    show: function() {
+        menuLib.show();
+    }
 };
 
 export default gameMenu;

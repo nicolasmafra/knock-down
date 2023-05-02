@@ -13,7 +13,7 @@ const gamePhysics = {
 	world: null,
 	gravity: 9.8,
 
-	configure: function() {
+	start: function() {
 		this.world = new CANNON.World();
 		this.world.gravity.set(0,0,-this.gravity);
 		//this.world.broadphase = new CANNON.NaiveBroadphase();

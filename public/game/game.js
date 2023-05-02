@@ -19,6 +19,7 @@ const game = {
 		this.scenario = new GameScenario();
 		this.scenario.addToGame();
 
+		this.players = [];
 		this.createPlayer(0, 0x0000ff, 0, 0);
 		if (this.playerCount >= 2) this.createPlayer(1, 0xff00ff, 3, 1);
 		if (this.playerCount >= 3) this.createPlayer(2, 0xff0000, -3, -1);

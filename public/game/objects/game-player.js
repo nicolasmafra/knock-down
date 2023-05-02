@@ -8,6 +8,7 @@ const width = 0.8;
 const height = 1.7;
 const moveMagnitude = 40.0;
 const jumpMagnitude = 400.0;
+const minZ = -2*height;
 
 const rotationDirection = new CANNON.Vec3(1,0,0);
 const rotationAngle = Math.PI/2;
@@ -20,6 +21,7 @@ const geometry = new THREE.CylinderGeometry(width/2, width/2, height);
 export default class GamePlayer {
 
   bodyBelow = null;
+  fallen = false;
 
   constructor(index, color, x, y) {
     this.index = index;
@@ -56,6 +58,9 @@ export default class GamePlayer {
   }
 
   update() {
+    if (this.checkFallen()) {
+      return;
+    }
     if (this.input) {
       this.#applyInput();
     }
@@ -82,6 +87,16 @@ export default class GamePlayer {
   #jump() {
     this.bodyBelow = null;
     this.body.applyImpulse(jumpImpulse);
+  }
+
+  checkFallen() {
+    if (this.fallen) {
+      return true;
+    }
+    if (this.body.position.z < minZ) {
+      this.fallen = true;
+    }
+    return this.fallen;
   }
 
   #fixBodyBelow() {
