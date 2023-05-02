@@ -20,9 +20,10 @@ const game = {
 		this.scenario.addToGame();
 
 		this.players = [];
-		this.createPlayer(0, 0x0000ff, 0, 0);
-		if (this.playerCount >= 2) this.createPlayer(1, 0xff00ff, 3, 1);
-		if (this.playerCount >= 3) this.createPlayer(2, 0xff0000, -3, -1);
+		this.createPlayer(0, 0x0000ff, -3, -3);
+		if (this.playerCount >= 2) this.createPlayer(1, 0xff00ff, 3, 3);
+		if (this.playerCount >= 3) this.createPlayer(2, 0xff0000, -3, 3);
+		if (this.playerCount >= 4) this.createPlayer(2, 0xffff00, 3, -3);
 		
 		gameEngine.playerCount = this.playerCount;
 		gameEngine.players = this.players;

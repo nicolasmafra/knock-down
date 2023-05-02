@@ -24,13 +24,26 @@ const menuLib = {
     },
 
     select: function(menuKey) {
+        let current = this.currentMenu();
+        if (!current.children || !current.children[menuKey]) {
+            throw new Error("Invalid menu: " + menuKey);
+        }
         this.stack.push(menuKey);
+        this.render();
+    },
+
+    setCurrentMenu(stack) {
+        this.stack = stack;
         this.render();
     },
 
     back: function() {
         this.stack.pop();
         this.render();
+    },
+
+    backToRoot: function() {
+        this.setCurrentMenu([]);
     },
 
     currentMenu: function() {
@@ -56,6 +69,9 @@ const menuLib = {
         titleElement.classList.add(this.titleClass);
         this.component.appendChild(titleElement);
 
+        if (!current.children) {
+            return;
+        }
         Object.entries(current.children).forEach(([key, menuItem]) => {
             let element = document.createElement("div");
             element.innerHTML = menuItem.title;

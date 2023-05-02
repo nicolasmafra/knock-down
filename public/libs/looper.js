@@ -99,6 +99,9 @@ const looper = {
 			}
 		}
 		
+		if (!this.requestAnimationFrameId) {
+			return;
+		}
 		if (!this.requestBeforeRender) {
 			this.requestAnimationFrameId = requestAnimationFrame(() => this.render());
 		}

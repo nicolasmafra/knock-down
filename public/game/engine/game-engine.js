@@ -17,7 +17,7 @@ const gameEngine = {
 		gameInput.configure();
 		looper.saveFpsHistory = true;
 		looper.renderFunction = (delta) => this.update(delta);
-        looper.exceptionFunction = (e) => alert("Error: " + e.message);
+        looper.exceptionFunction = (e) => this.showMessage("Error: " + e.message);
 
 		gameGfx.configure(this.container);
 	},
@@ -66,6 +66,12 @@ const gameEngine = {
 			}
 		});
 		if (this.players.length < this.minPlayerCount) {
+			if (this.players.length == 1) {
+				const winner = this.players[0];
+				this.showMessage("Winner: Player" + winner.index);
+			} else {
+				this.showMessage("No one win :(");
+			}
 			this.stop();
 			return;
 		}
@@ -84,14 +90,18 @@ const gameEngine = {
 	},
 
 	removePlayer: function(player) {
-		console.log("Player " + player.index + " falled.");
+		console.log("Player " + player.index + " fell.");
 		this.removeFromGame(player);
 		this.players = this.players.filter(p => p != player);
 	},
 
+	showMessage: function(message) {
+		gameMenu.showMessage(message);
+	},
+
 	stop: function() {
 		looper.stop();
-		gameMenu.show();
+		//gameMenu.show();
 	},
 };
 
