@@ -14,6 +14,7 @@ export default class GameGem {
   mesh = null;
   player = null;
   time = 0;
+  color = new THREE.Color(0, 0.5, 0.5);
 
   constructor() {
     this.#createBody();
@@ -23,7 +24,7 @@ export default class GameGem {
   #createMesh() {
     this.mesh = new THREE.Mesh(
         new THREE.OctahedronGeometry(radius),
-        new THREE.MeshLambertMaterial({ color: 0xffffdd })
+        new THREE.MeshLambertMaterial({ color: this.color })
     );
     this.mesh.castShadow = true;
     this.mesh.userData = this;
@@ -58,6 +59,10 @@ export default class GameGem {
     } else {
       this.body.position.copy(initialPosition);
     }
+    const colorIntensity = this.time/this.maxTime;
+    this.mesh.material.color.r = colorIntensity;
+    this.mesh.material.color.g = (1 - colorIntensity)/2;
+    this.mesh.material.color.b = (1 - colorIntensity)/2;
     gamePhysics.updateMesh(this);
   }
 
