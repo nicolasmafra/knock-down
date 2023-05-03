@@ -87,6 +87,10 @@ const menuLib = {
         this.container.style.display = 'none';
     },
 
+    isVisible: function() {
+        return this.container.style.display !== 'none';
+    },
+
     render: function() {
         this.selected = -1;
         let current = this.currentMenu();

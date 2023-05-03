@@ -4,6 +4,8 @@ import { gamepadProxy } from './gamepad-proxy.js';
 export default {
     inAction: false,
     checkMenuInput: function() {
+        if (!menuLib.isVisible()) return;
+        
         let inActionNow = false;
         gamepadProxy.getGamepads().forEach(gamepad => {
             if (gamepad.axes[1] > 0.5) {
