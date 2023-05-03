@@ -7,47 +7,51 @@ import gameGfx from '../engine/game-gfx.js';
 import GameGround from './game-ground.js';
 
 const playerWidth = 1.5;
+const playerJumpHeigth = 1.0;
 const scenarioWidth = 10;
 const wallWidth = scenarioWidth/2 - playerWidth;
-const wallHeight = 2.0;
+const wallHeight = 2*playerJumpHeigth;
 const wallDepth = 1;
 const wallDistance = wallWidth/2 + playerWidth/2;
-const Z_AXIS = new CANNON.Vec3(0, 0, 1);
+const wallRadialDistance = scenarioWidth/2 + wallDepth/2;
 
 export default class GameScenario {
   grounds = [];
 
   constructor() {
-    this.grounds.push(new GameGround(new CANNON.Vec3(scenarioWidth, scenarioWidth, 0.2)));
     
-    const direction = new CANNON.Quaternion();
     for (var i = 0; i < 4; i++) {
-      direction.setFromAxisAngle(Z_AXIS, i * Math.PI/2);
-      this.#addWallsAtDirection(direction);
+      let angle = (i+0.5) * Math.PI/2;
+      this.#addWallsAtAngle(angle);
     }
 
-    this.grounds.push(new GameGround(new CANNON.Vec3(playerWidth, playerWidth, 1)));
-  }
-
-  #addWallsAtDirection(direction) {
-
-    this.#createGround(direction,
-      new CANNON.Vec3(wallDepth, wallWidth, wallHeight),
-      new CANNON.Vec3(-wallDepth/2-scenarioWidth/2, wallDistance, wallHeight/2)
-    );
-    this.#createGround(direction,
-      new CANNON.Vec3(wallDepth, wallWidth, wallHeight),
-      new CANNON.Vec3(-wallDepth/2-scenarioWidth/2, -wallDistance, wallHeight/2)
+    this.grounds.push(new GameGround(
+      new CANNON.Vec3(playerWidth, playerWidth, playerJumpHeigth),
+      new CANNON.Vec3(0, 0, playerJumpHeigth/2),
+      Math.PI/4)
     );
   }
 
-  #createGround(direction, size, position) {
-    direction.vmult(position, position);
-    direction.vmult(size, size);
-    if (size.x < 0) size.x *= -1;
-    if (size.y < 0) size.y *= -1;
+  #addWallsAtAngle(angle) {
 
-    const ground = new GameGround(size, position);
+    const groundWidth = 0.3*scenarioWidth;
+    const groundLength = scenarioWidth - groundWidth;
+    this.#createGround(angle,
+      new CANNON.Vec3(groundWidth, groundLength, 0.2),
+      new CANNON.Vec3(-scenarioWidth/2 + groundWidth/2, -scenarioWidth/2 + groundLength/2, 0.1)
+    );
+    this.#createGround(angle,
+      new CANNON.Vec3(wallDepth, wallWidth, wallHeight),
+      new CANNON.Vec3(-wallRadialDistance, wallDistance, wallHeight/2)
+    );
+    this.#createGround(angle,
+      new CANNON.Vec3(wallDepth, wallWidth, wallHeight),
+      new CANNON.Vec3(-wallRadialDistance, -wallDistance, wallHeight/2)
+    );
+  }
+
+  #createGround(angle, size, position) {
+    const ground = new GameGround(size, position, angle);
     this.grounds.push(ground);
   }
 

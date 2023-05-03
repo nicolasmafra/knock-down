@@ -27,7 +27,10 @@ const gameEngine = {
 			return;
 		}
 		if (object.body) gamePhysics.world.addBody(object.body);
-		if (object.mesh) gameGfx.addObject(object);
+		if (object.mesh) {
+			gamePhysics.updateMesh(object);
+			gameGfx.addObject(object);
+		}
 	},
 
 	removeFromGame: function(object) {

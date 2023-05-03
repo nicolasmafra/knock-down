@@ -1,13 +1,13 @@
 import * as CANNON from 'cannon';
 
-const upVector = new CANNON.Vec3(0, 0, 1);
 const contactNormal = new CANNON.Vec3();
 
 const gamePhysics = {
     
+	upVector: new CANNON.Vec3(0, 0, 1),
 	material: new CANNON.Material({
-		friction: 0.05,
-		restitution: 0.3,
+		friction: 0.04,
+		restitution: 0.4,
 	}),
 	timeUnit: 0.02,
 	world: null,
@@ -16,12 +16,6 @@ const gamePhysics = {
 	start: function() {
 		this.world = new CANNON.World();
 		this.world.gravity.set(0,0,-this.gravity);
-		//this.world.broadphase = new CANNON.NaiveBroadphase();
-		//this.world.solver.iterations = 10;
-		/*this.world.addContactMaterial(new CANNON.ContactMaterial(physicsMaterial, physicsMaterial, {
-			friction: 0.1,
-			restitution: 0.1,
-		}));*/
 	},
 
 	update: function() {
@@ -59,28 +53,18 @@ const gamePhysics = {
 		} else {
 			contactNormal.copy(contact.ni)
 		}
-		return contactNormal.dot(upVector) > 0.5;
+		return contactNormal.dot(this.upVector) > 0.5;
 	},
 
-	clampHorizontal: function(obj, min, max) {
-		let width = obj.geometry.parameters.width;
-		let height = obj.geometry.parameters.height;
-		if (obj.position.x < min + width/2) {
-			obj.position.x = min + width/2;
-			if (obj.userData.velocity.x < 0) obj.userData.velocity.x = 0;
-		}
-		if (obj.position.x > max - width/2) {
-			obj.position.x = max - width/2;
-			if (obj.userData.velocity.x > 0) obj.userData.velocity.x = 0;
-		}
-		if (obj.position.y < min + height/2) {
-			obj.position.y = min + height/2;
-			if (obj.userData.velocity.y < 0) obj.userData.velocity.y = 0;
-		}
-		if (obj.position.y > max - height/2) {
-			obj.position.y = max - height/2;
-			if (obj.userData.velocity.y > 0) obj.userData.velocity.y = 0;
-		}
+	clampHorizontalVelocity: function(body, max) {
+		const x = body.velocity.x;
+		const y = body.velocity.y;
+		const v2 = x*x + y*y;
+		if (v2 < max * max) return;
+
+		const ratio = Math.sqrt(v2) / max;
+		body.velocity.x /= ratio;
+		body.velocity.y /= ratio;
 	},
 };
 

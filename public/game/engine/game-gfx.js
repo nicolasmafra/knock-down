@@ -1,5 +1,9 @@
 import * as THREE from 'three';
 
+const horizontalDistance = 9;
+const verticalDistance = 13;
+const angle = 0.18 * Math.PI;
+
 const outlineMaterial = new THREE.MeshBasicMaterial({
 	color: 0x000000,
 	side: THREE.BackSide,
@@ -7,6 +11,7 @@ const outlineMaterial = new THREE.MeshBasicMaterial({
 
 const gameGfx = {
 
+	xVector: new THREE.Vector3(1, 0, 0),
 	renderer: new THREE.WebGLRenderer({
 		antialias: true,
 	}),
@@ -61,8 +66,8 @@ const gameGfx = {
     },
 
 	resetCamera: function() {
-		this.camera.position.set(0, -8, 9);
-		this.camera.lookAt(new THREE.Vector3());
+		this.camera.position.set(0, -horizontalDistance, verticalDistance);
+		this.camera.quaternion.setFromAxisAngle(this.xVector, angle);
 	},
 
     render: function() {

@@ -6,9 +6,11 @@ import gameInput from '../engine/game-input.js';
 
 const width = 0.8;
 const height = 1.7;
-const moveMagnitude = 40.0;
-const jumpMagnitude = 400.0;
+const moveMagnitude = 20.0;
+const jumpMagnitude = 450.0;
 const minZ = -2*height;
+const maxSpeed = 10.0;
+const canMoveOnAir = false;
 
 const rotationDirection = new CANNON.Vec3(1,0,0);
 const rotationAngle = Math.PI/2;
@@ -42,7 +44,7 @@ export default class GamePlayer {
       shape: new CANNON.Cylinder(width/2, width/2, height),
       material: gamePhysics.material,
       fixedRotation: true,
-      linearDamping: 0.3,
+      linearDamping: 0,
       mass: 70,
     });
     this.body.quaternion.copy(rotation);
@@ -69,12 +71,13 @@ export default class GamePlayer {
 
   #applyInput() {
     this.#fixBodyBelow();
-    if (this.bodyBelow) {
+    if (this.bodyBelow || canMoveOnAir) {
       this.#move();
-      if (this.input.jump) {
-        this.#jump();
-      }
     }
+    if (this.bodyBelow && this.input.jump) {
+      this.#jump();
+    }
+    gamePhysics.clampHorizontalVelocity(this.body, maxSpeed);
   }
 
   #move() {
@@ -104,7 +107,9 @@ export default class GamePlayer {
     if (!this.bodyBelow) {
       return;
     }
-    const needBodyBelow = this.input.jump || this.input.move[0] !== 0 || this.input.move[1] !== 0;
+    let needBodyBelow = this.input.jump;
+    if (canMoveOnAir) needBodyBelow |= this.input.move[0] !== 0 || this.input.move[1] !== 0;
+
     if (!needBodyBelow) {
       return;
     }

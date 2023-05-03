@@ -6,10 +6,13 @@ export default class GameGround {
   body = null;
   mesh = null;
 
-  constructor(size, position) {
+  constructor(size, position, angle) {
     this.#createBody(size, position);
     this.#createMesh(size);
-    gamePhysics.updateMesh(this);
+    if (angle) {
+      this.body.quaternion.setFromAxisAngle(gamePhysics.upVector, angle);
+      this.body.quaternion.vmult(this.body.position, this.body.position);
+    }
   }
 
   #createBody(size, position) {

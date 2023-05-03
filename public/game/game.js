@@ -20,6 +20,7 @@ const game = {
 	},
 
 	start: function() {
+		gameEngine.playerCount = this.playerCount;
 		gameEngine.preStart();
 		
 		this.scenario = new GameScenario();
@@ -31,7 +32,6 @@ const game = {
 		if (this.playerCount >= 3) this.createPlayer(2, 0xff0000, -3, 3);
 		if (this.playerCount >= 4) this.createPlayer(2, 0xffff00, 3, -3);
 		
-		gameEngine.playerCount = this.playerCount;
 		gameEngine.players = this.players;
 		gameEngine.start();
 	},
