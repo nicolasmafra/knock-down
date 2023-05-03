@@ -6,22 +6,23 @@ import gameGfx from '../engine/game-gfx.js';
 
 import GameGround from './game-ground.js';
 
-const playerWidth = 1.5;
+const playerWidth = 1.2;
 const playerJumpHeigth = 1.0;
 const scenarioWidth = 10;
 const wallWidth = scenarioWidth/2 - playerWidth;
 const wallHeight = 2*playerJumpHeigth;
 const wallDepth = 1;
 const wallDistance = wallWidth/2 + playerWidth/2;
-const wallRadialDistance = scenarioWidth/2 + wallDepth/2;
+const n = 4;
+const wallRadialDistance = n*scenarioWidth/8 + wallDepth/2;
 
 export default class GameScenario {
   grounds = [];
 
   constructor() {
     
-    for (var i = 0; i < 4; i++) {
-      let angle = (i+0.5) * Math.PI/2;
+    for (var i = 0; i < 8; i++) {
+      let angle = (i+0.5) * 2*Math.PI/n;
       this.#addWallsAtAngle(angle);
     }
 

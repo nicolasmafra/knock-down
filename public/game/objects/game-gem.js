@@ -3,13 +3,13 @@ import * as CANNON from 'cannon';
 import gamePhysics from '../engine/game-physics.js';
 import GamePlayer from './game-player.js';
 
-const maxTime = 10;
 const initialPositionZ = 3.0;
 const radius = 0.3;
 const rotationSpeed = 0.05;
 const rotation = new CANNON.Quaternion().setFromAxisAngle(new CANNON.Vec3(0, 0, 1), rotationSpeed);
 
 export default class GameGem {
+  maxTime = 10;
   body = null;
   mesh = null;
   player = null;
@@ -62,6 +62,6 @@ export default class GameGem {
   }
 
   timeIsOver() {
-    return this.time >= maxTime;
+    return this.time >= this.maxTime;
   }
 }

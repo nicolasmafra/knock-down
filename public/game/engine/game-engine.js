@@ -7,7 +7,8 @@ import gameMenu from '../game-menu.js';
 const gameEngine = {
 
 	container: document.getElementsByClassName('game-container')[0],
-	fpsElement: document.getElementById('FPS'),
+	guiElement: document.getElementById('GAME_GUI'),
+	score: {},
 
     playerCount: 1,
 	players: [],
@@ -67,9 +68,7 @@ const gameEngine = {
 		this.players.forEach(player => player.update());
 		this.gem.update();
 		if (this.gem.timeIsOver()) {
-			let winner = this.gem.player;
-			this.showMessage("Winner: " + winner.name);
-			this.stop();
+			this.gameOver(this.gem.player);
 			return;
 		}
 
@@ -79,13 +78,7 @@ const gameEngine = {
 			}
 		});
 		if (this.players.length < this.minPlayerCount) {
-			if (this.players.length == 1) {
-				const winner = this.players[0];
-				this.showMessage("Winner: " + winner.name);
-			} else {
-				this.showMessage("No one win :(");
-			}
-			this.stop();
+			this.gameOver(this.players.length == 1 ? this.players[0] : null);
 			return;
 		}
 
@@ -96,9 +89,30 @@ const gameEngine = {
 		this.updateGui();
 	},
 
+	gameOver: function(winner) {
+		if (winner) {
+			this.showMessage("Winner: " + winner.name);
+
+			if (!this.score[winner.name]) this.score[winner.name] = 0;
+
+			this.score[winner.name]++;
+		} else {
+			this.showMessage("Draw");
+		}
+		this.stop();
+	},
+
 	updateGui: function() {
 		if (looper.ticks % 15 == 0) {
-			this.fpsElement.innerHTML = looper.getFpsAverage().toFixed(2);
+			let text = "";
+			//text += "FPS: " + looper.getFpsAverage().toFixed(2) + "<br>";
+			for (const [playerName, score] of Object.entries(this.score)) {
+				text += playerName + ": " + score + " points<br>";
+			}
+			if (this.gem.time > 0) {
+				text += "Time: " + (this.gem.maxTime - this.gem.time).toFixed(0) + "<br>";
+			}
+			this.guiElement.innerHTML = text;
 		}
 	},
 

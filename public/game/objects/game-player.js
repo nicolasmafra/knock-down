@@ -8,7 +8,7 @@ const width = 0.8;
 const height = 1.7;
 const moveMagnitude = 20.0;
 const jumpMagnitude = 450.0;
-const minZ = -2*height;
+const minZ = -3*height;
 const maxSpeed = 10.0;
 const canMoveOnAir = false;
 
