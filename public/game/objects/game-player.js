@@ -22,7 +22,7 @@ const geometry = new THREE.CylinderGeometry(width/2, width/2, height);
 
 export default class GamePlayer {
 
-  bodyBelow = null;
+  bodiesBelow = [];
   fallen = false;
 
   constructor(index, color, x, y) {
@@ -34,7 +34,7 @@ export default class GamePlayer {
 
     this.body.addEventListener('collide', (event) => {
       if (gamePhysics.bodyIsOver(event.contact, this.body)) {
-        this.bodyBelow = gamePhysics.inContact(event.contact, this.body);
+        this.bodiesBelow.push(gamePhysics.inContact(event.contact, this.body));
       }
     });
   }
@@ -72,11 +72,12 @@ export default class GamePlayer {
 
   #applyInput() {
     this.#fixBodyBelow();
-    if (this.bodyBelow || canMoveOnAir) {
+    if (this.bodiesBelow.length > 0 || canMoveOnAir) {
       this.#move();
     }
-    if (this.bodyBelow && this.input.jump) {
+    if (this.bodiesBelow.length > 0 && this.input.jump) {
       this.#jump();
+      this.bodiesBelow = [];
     }
     gamePhysics.clampHorizontalVelocity(this.body, maxSpeed);
   }
@@ -90,7 +91,6 @@ export default class GamePlayer {
   }
 
   #jump() {
-    this.bodyBelow = null;
     this.body.applyImpulse(jumpImpulse);
   }
 
@@ -105,19 +105,20 @@ export default class GamePlayer {
   }
 
   #fixBodyBelow() {
-    if (!this.bodyBelow) {
+    if (this.bodiesBelow.length == 0) {
       return;
     }
     let needBodyBelow = this.input.jump;
-    if (canMoveOnAir) needBodyBelow |= this.input.move[0] !== 0 || this.input.move[1] !== 0;
+    if (!canMoveOnAir) needBodyBelow |= this.input.move[0] !== 0 || this.input.move[1] !== 0;
 
     if (!needBodyBelow) {
       return;
     }
-    const contact = gamePhysics.findContact(this.body, this.bodyBelow);
-    if (!contact || !gamePhysics.bodyIsOver(contact, this.body)) {
-      this.bodyBelow = null;
-    }
+
+    this.bodiesBelow = this.bodiesBelow.filter(bodyBelow => {
+      const contact = gamePhysics.findContact(this.body, bodyBelow);
+      return contact && gamePhysics.bodyIsOver(contact, this.body);
+    });
   }
 
 }
