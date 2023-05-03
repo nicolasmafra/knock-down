@@ -29,8 +29,10 @@ const gamePhysics = {
 	},
 
 	updateMesh: function(object) {
-		object.mesh.position.copy(object.body.position);
-		object.mesh.quaternion.copy(object.body.quaternion);
+		if (object.body) {
+			object.mesh.position.copy(object.body.position);
+			object.mesh.quaternion.copy(object.body.quaternion);
+		}
 	},
 
 	findContact: function(bodyA, bodyB) {

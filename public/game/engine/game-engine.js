@@ -11,6 +11,7 @@ const gameEngine = {
 
     playerCount: 1,
 	players: [],
+	gem: null,
 	minPlayerCount: 1,
 	running: false,
 
@@ -30,6 +31,9 @@ const gameEngine = {
 		if (object.mesh) {
 			gamePhysics.updateMesh(object);
 			gameGfx.addObject(object);
+		}
+		if (object.afterAddToGame) {
+			object.afterAddToGame();
 		}
 	},
 
@@ -61,6 +65,13 @@ const gameEngine = {
 		gameInput.listen();
 
 		this.players.forEach(player => player.update());
+		this.gem.update();
+		if (this.gem.timeIsOver()) {
+			let winner = this.gem.player;
+			this.showMessage("Winner: " + winner.name);
+			this.stop();
+			return;
+		}
 
 		this.players.forEach(player => {
 			if (player.fallen) {
