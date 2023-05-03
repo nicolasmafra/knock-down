@@ -33,6 +33,7 @@ export default class GameGround {
         new THREE.BoxGeometry(size.x, size.y, size.z),
         new THREE.MeshLambertMaterial({ color: 0x00ff00 })
     );
+    this.mesh.receiveShadow = true;
     this.mesh.userData = this;
   }
 }

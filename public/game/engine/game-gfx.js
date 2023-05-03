@@ -19,6 +19,7 @@ const gameGfx = {
 	camera: null,
 
     configure: function(container) {
+		this.renderer.shadowMap.enabled = true;
 		container.appendChild(this.renderer.domElement);
 
 		window.onresize = () => this.resize();
@@ -61,7 +62,8 @@ const gameGfx = {
 
     addDirectionalLight: function() {
 		const directionalLight = new THREE.DirectionalLight(0xffffdd, 0.6);
-		directionalLight.position.set(0, 0.5, 1);
+		directionalLight.position.set(100, 50, 300);
+		directionalLight.castShadow = true;
 		this.scene.add(directionalLight);
     },
 

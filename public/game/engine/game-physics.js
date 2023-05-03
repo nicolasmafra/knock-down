@@ -6,7 +6,7 @@ const gamePhysics = {
     
 	upVector: new CANNON.Vec3(0, 0, 1),
 	material: new CANNON.Material({
-		friction: 0.04,
+		friction: 0.03,
 		restitution: 0.4,
 	}),
 	timeUnit: 0.02,

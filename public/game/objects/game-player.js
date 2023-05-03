@@ -44,7 +44,7 @@ export default class GamePlayer {
       shape: new CANNON.Cylinder(width/2, width/2, height),
       material: gamePhysics.material,
       fixedRotation: true,
-      linearDamping: 0,
+      linearDamping: 0.05,
       mass: 70,
     });
     this.body.quaternion.copy(rotation);
@@ -55,8 +55,9 @@ export default class GamePlayer {
   #createMesh(color) {
     this.mesh = new THREE.Mesh(
       geometry,
-      new THREE.MeshLambertMaterial({ color })
+      new THREE.MeshStandardMaterial({ color })
     );
+    this.mesh.castShadow = true;
     this.mesh.userData = this;
   }
 
