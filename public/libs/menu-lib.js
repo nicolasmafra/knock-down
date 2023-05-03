@@ -28,14 +28,19 @@ const menuLib = {
 
     moveDown: function() {
         if (!this.component.children) return;
-        this.selected = (this.selected + 1) % this.getMenuItems().length;
-        this.renderSelected();
+        const max = this.getMenuItems().length - 1;
+        if (this.selected < max) {
+            this.selected++;
+            this.renderSelected();
+        }
     },
 
     moveUp: function() {
         if (!this.component.children) return;
-        this.selected = (this.selected - 1) % this.getMenuItems().length;
-        this.renderSelected();
+        if (this.selected > 0) {
+            this.selected--;
+            this.renderSelected();
+        }
     },
 
     select: function(menuKey) {

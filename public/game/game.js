@@ -1,6 +1,6 @@
 import looper from '../../libs/looper.js';
 import gameEngine from './engine/game-engine.js';
-import gamepadMenu from '../../libs/gamepad-menu.js';
+import gamepadMenu from '../libs/gamepad-menu.js';
 
 import GameScenario from './objects/game-scenario.js';
 import GamePlayer from './objects/game-player.js';
