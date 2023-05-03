@@ -118,6 +118,9 @@ const gameEngine = {
 
 	removePlayer: function(player) {
 		console.log("Player " + player.index + " fell.");
+		if (this.gem.player == player) {
+			this.gem.reset();
+		}
 		this.removeFromGame(player);
 		this.players = this.players.filter(p => p != player);
 	},

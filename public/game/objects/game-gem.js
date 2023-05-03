@@ -3,7 +3,7 @@ import * as CANNON from 'cannon';
 import gamePhysics from '../engine/game-physics.js';
 import GamePlayer from './game-player.js';
 
-const initialPositionZ = 3.0;
+const initialPosition = new CANNON.Vec3(0, 0, 3.0);
 const radius = 0.3;
 const rotationSpeed = 0.05;
 const rotation = new CANNON.Quaternion().setFromAxisAngle(new CANNON.Vec3(0, 0, 1), rotationSpeed);
@@ -35,7 +35,7 @@ export default class GameGem {
       mass: 1,
       linearDamping: 1.0,
     });
-    this.body.position.set(0, 0, initialPositionZ);
+    this.body.position.copy(initialPosition);
     this.body.userData = this;
   }
 
@@ -56,12 +56,17 @@ export default class GameGem {
       this.body.position.z += 1.8;
       this.time += gamePhysics.timeUnit;
     } else {
-      this.body.position.z = initialPositionZ;
+      this.body.position.copy(initialPosition);
     }
     gamePhysics.updateMesh(this);
   }
 
   timeIsOver() {
     return this.time >= this.maxTime;
+  }
+
+  reset() {
+    this.player = null;
+    this.time = 0;
   }
 }
