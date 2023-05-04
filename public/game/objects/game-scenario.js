@@ -22,7 +22,7 @@ export default class GameScenario {
   constructor() {
     
     for (var i = 0; i < 8; i++) {
-      let angle = (i+0.5) * 2*Math.PI/n;
+      let angle = i * 2*Math.PI/n;
       this.#addWallsAtAngle(angle);
     }
 
