@@ -68,6 +68,12 @@ const menuLib = {
     },
 
     back: function() {
+        let current = this.currentMenu();
+        if (current.children && current.children.back) {
+            this.select('back');
+            return;
+        }
+
         if (this.stack.length <= this.stackMin) return;
         
         this.stack.pop();
@@ -97,7 +103,10 @@ const menuLib = {
     },
 
     render: function() {
-        this.selected = -1;
+        if (this.selected >= 0) {
+            this.selected = 0;
+        }
+
         let current = this.currentMenu();
         this.component.innerHTML = '';
 
@@ -114,13 +123,21 @@ const menuLib = {
             element.innerHTML = menuItem.title;
             element.classList.add(this.itemClass);
 
-            let action = menuItem.action
-                ? menuItem.action
-                : () => this.select(key);
-            element.addEventListener('click', action);
+            element.addEventListener('click', () => {
+
+                this.selected = -1;
+                if (menuItem.action) {
+                    menuItem.action();
+                } else {
+                    this.select(key);
+                }
+            });
 
             this.component.appendChild(element);
         });
+        if (this.selected >= 0) {
+            this.renderSelected();
+        }
     },
 
     renderSelected: function() {

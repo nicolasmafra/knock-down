@@ -29,13 +29,17 @@ const gameMenu = {
                     children: {
                         "back": {
                             title: "Voltar",
-                            action: () => this.backToMainMenu(),
+                            action: () => menuLib.setCurrentMenu(['select-scenario']),
                         }
                     }
                 },
                 "select-scenario": {
                     title: "Selecione o cenário",
                     children: {
+                        "size-x": {
+                            title: "Aleatório",
+                            action: () => this.selectScenarioSize(-1),
+                        },
                         "size-4": {
                             title: "Quadrado",
                             action: () => this.selectScenarioSize(4),
@@ -73,6 +77,10 @@ const gameMenu = {
     },
 
     selectScenarioSize: function(n) {
+        if (n < 0) {
+            let items = [4,6,8];
+            n = items[Math.floor(Math.random()*items.length)];
+        }
         game.scenarioSize = n;
         this.playGame();
     },
