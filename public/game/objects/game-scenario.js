@@ -9,21 +9,20 @@ import GameGround from './game-ground.js';
 const playerWidth = 1.2;
 const playerJumpHeigth = 2.55;
 
-const n = 8;
 const scenarioRadius = 6;
-
-const wallInternalRadialDistance = scenarioRadius - playerWidth;
-const wallRadialDistance = scenarioRadius - playerWidth/2;
-const wallWidth = 2*Math.PI*wallInternalRadialDistance/n - playerWidth;
-const wallHeight = 1.0*playerJumpHeigth;
-const wallDepth = playerWidth;
 
 const pilarHeight = 0.8*playerJumpHeigth;
 
 export default class GameScenario {
   grounds = [];
 
-  constructor() {
+  constructor(n) {
+
+    const wallInternalRadialDistance = scenarioRadius - playerWidth;
+    const wallRadialDistance = scenarioRadius - playerWidth/2;
+    const wallWidth = 2*Math.PI*wallInternalRadialDistance/n - playerWidth;
+    const wallHeight = 1.1*playerJumpHeigth;
+    const wallDepth = playerWidth;
     
     for (var i = 0; i < n; i++) {
       let angle = (i+0.5) * 2*Math.PI/n;

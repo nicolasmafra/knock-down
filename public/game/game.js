@@ -10,6 +10,7 @@ const game = {
 
 	playerCount: 2,
 	players: [],
+	scenarioSize: 8,
 	scenario: null,
 	gem: null,
 
@@ -25,7 +26,7 @@ const game = {
 		gameEngine.playerCount = this.playerCount;
 		gameEngine.preStart();
 		
-		this.scenario = new GameScenario();
+		this.scenario = new GameScenario(this.scenarioSize);
 		gameEngine.addToGame(this.scenario);
 
 		this.players = [];

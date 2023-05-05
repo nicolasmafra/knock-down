@@ -10,7 +10,7 @@ const rotationSpeed = 0.05;
 const rotation = new CANNON.Quaternion().setFromAxisAngle(new CANNON.Vec3(0, 0, 1), rotationSpeed);
 
 export default class GameGem {
-  maxTime = 10;
+  maxTime = 15;
   body = null;
   mesh = null;
   player = null;

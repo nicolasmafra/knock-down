@@ -7,20 +7,20 @@ const gameMenu = {
         menuLib.data = {
             title: "root",
             children: {
-                "visible": {
-                    title: "Knock Down",
+                "main": {
+                    title: "Bem vindo ao Knock Down",
                     children: {
                         "2-players": {
                             title: "2 Players",
-                            action: () => this.playGame(2),
+                            action: () => this.selectPlayerCount(2),
                         },
                         "3-players": {
                             title: "3 Players",
-                            action: () => this.playGame(3),
+                            action: () => this.selectPlayerCount(3),
                         },
                         "4-players": {
                             title: "4 Players",
-                            action: () => this.playGame(4),
+                            action: () => this.selectPlayerCount(4),
                         },
                     }
                 },
@@ -28,7 +28,28 @@ const gameMenu = {
                     title: "XXX",
                     children: {
                         "back": {
-                            title: "Back",
+                            title: "Voltar",
+                            action: () => this.backToMainMenu(),
+                        }
+                    }
+                },
+                "select-scenario": {
+                    title: "Selecione o cenário",
+                    children: {
+                        "size-4": {
+                            title: "Quadrado",
+                            action: () => this.selectScenarioSize(4),
+                        },
+                        "size-6": {
+                            title: "Hexágono",
+                            action: () => this.selectScenarioSize(6),
+                        },
+                        "size-8": {
+                            title: "Octágono",
+                            action: () => this.selectScenarioSize(8),
+                        },
+                        "back": {
+                            title: "Voltar",
                             action: () => this.backToMainMenu(),
                         }
                     }
@@ -38,7 +59,7 @@ const gameMenu = {
     },
 
     backToMainMenu: function() {
-        menuLib.setCurrentMenu(['visible']);
+        menuLib.setCurrentMenu(['main']);
     },
 
     start: function() {
@@ -46,8 +67,17 @@ const gameMenu = {
         this.backToMainMenu();
     },
 
-    playGame: function(playerCount) {
+    selectPlayerCount: function(playerCount) {
         game.playerCount = playerCount;
+        menuLib.setCurrentMenu(['select-scenario']);
+    },
+
+    selectScenarioSize: function(n) {
+        game.scenarioSize = n;
+        this.playGame();
+    },
+
+    playGame: function() {
         menuLib.hide();
         game.start();
     },
