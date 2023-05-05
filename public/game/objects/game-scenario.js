@@ -6,26 +6,31 @@ import gameGfx from '../engine/game-gfx.js';
 
 import GameGround from './game-ground.js';
 
-const playerWidth = 1.2;
+const playerWidth = 0.7;
 const playerJumpHeigth = 2.55;
 
 const scenarioRadius = 6;
+const angleOffset = Math.PI/2;
+const useHalfAngle = true;
 
 const pilarHeight = 0.8*playerJumpHeigth;
+const pilarWidth = 1.5*playerWidth;
+const wallHoleWidth = 2.0*playerWidth;
+const wallHeight = 1.1*playerJumpHeigth;
+const wallDepth = 0.5*playerWidth;
 
 export default class GameScenario {
   grounds = [];
 
   constructor(n) {
 
-    const wallInternalRadialDistance = scenarioRadius - playerWidth;
-    const wallRadialDistance = scenarioRadius - playerWidth/2;
-    const wallWidth = 2*Math.PI*wallInternalRadialDistance/n - playerWidth;
-    const wallHeight = 1.1*playerJumpHeigth;
-    const wallDepth = playerWidth;
-    
+    const wallInternalRadialDistance = scenarioRadius - wallDepth;
+    const wallRadialDistance = scenarioRadius - wallDepth/2;
+    const wallWidth = 2*Math.PI*wallInternalRadialDistance/n - wallHoleWidth;
+    const indexOffset = useHalfAngle ? 0.5 : 0;
+
     for (var i = 0; i < n; i++) {
-      let angle = (i+0.5) * 2*Math.PI/n;
+      let angle = angleOffset + (i + indexOffset) * 2*Math.PI/n;
       const rotation = new CANNON.Quaternion().setFromAxisAngle(gameEngine.upVector, angle);
       const position = new CANNON.Vec3(-wallRadialDistance, 0, wallHeight/2);
       rotation.vmult(position, position);
@@ -43,8 +48,8 @@ export default class GameScenario {
       gameEngine.geometryRotation)
     );
     this.grounds.push(new GameGround(
-      new CANNON.Box(new CANNON.Vec3(playerWidth/2, playerWidth/2, pilarHeight/2)),
-      new THREE.BoxGeometry(playerWidth, playerWidth, pilarHeight),
+      new CANNON.Box(new CANNON.Vec3(pilarWidth/2, pilarWidth/2, pilarHeight/2)),
+      new THREE.BoxGeometry(pilarWidth, pilarWidth, pilarHeight),
       new CANNON.Vec3(0, 0, pilarHeight/2),
       new CANNON.Quaternion().setFromAxisAngle(gameEngine.upVector, Math.PI/4))
     );

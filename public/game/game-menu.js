@@ -27,6 +27,10 @@ const gameMenu = {
                 "message": {
                     title: "XXX",
                     children: {
+                        "again": {
+                            title: "Novamente",
+                            action: () => this.playGame(),
+                        },
                         "back": {
                             title: "Voltar",
                             action: () => menuLib.setCurrentMenu(['select-scenario']),
@@ -95,7 +99,7 @@ const gameMenu = {
     },
 
     showMessage: function(message) {
-        console.log(message);
+        menuLib.selected = -1;
         menuLib.data.children.message.title = message;
         menuLib.setCurrentMenu(['message']);
         menuLib.show();

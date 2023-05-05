@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 
-const horizontalDistance = 9;
-const verticalDistance = 13;
-const angle = 0.18 * Math.PI;
+const fov = 50;
+const fovRadians = (fov/180)*Math.PI;
+const baseDistance = 7;
+const totalDistance = 12;
+const angle = 0.09 * Math.PI;
 
 const outlineMaterial = new THREE.MeshBasicMaterial({
 	color: 0x000000,
@@ -70,8 +72,10 @@ const gameGfx = {
     },
 
 	resetCamera: function() {
-		this.camera.position.set(0, -horizontalDistance, verticalDistance);
-		this.camera.quaternion.setFromAxisAngle(this.xVector, angle);
+		let verticalDistance = totalDistance*Math.cos(angle);
+		let horizontalDistance = totalDistance*Math.sin(angle);
+		this.camera.position.set(0, -baseDistance-horizontalDistance, verticalDistance);
+		this.camera.quaternion.setFromAxisAngle(this.xVector, angle+fovRadians/2);
 	},
 
     render: function() {
