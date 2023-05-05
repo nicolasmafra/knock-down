@@ -1,6 +1,7 @@
 import looper from '../../libs/looper.js';
 import gameEngine from './engine/game-engine.js';
 import gamepadMenu from '../libs/gamepad-menu.js';
+import gameAudio from './engine/game-audio.js';
 
 import GameScenario from './objects/game-scenario.js';
 import GamePlayer from './objects/game-player.js';
@@ -13,8 +14,10 @@ const game = {
 	scenarioSize: 8,
 	scenario: null,
 	gem: null,
+	running: false,
 
 	configure: function() {
+		gameAudio.configure();
 		gameEngine.configure();
 		looper.saveFpsHistory = true;
 		looper.renderFunction = (delta) => this.update(delta);
@@ -22,7 +25,13 @@ const game = {
 		looper.start();
 	},
 
+	prestart: function() {
+		//gameAudio.playMusic();
+	},
+
 	start: function() {
+		gameAudio.playMusic();
+		this.running = true;
 		gameEngine.playerCount = this.playerCount;
 		gameEngine.preStart();
 		
@@ -44,6 +53,7 @@ const game = {
 	},
 
 	resume: function() {
+		this.running = true;
 		gameEngine.resume();
 	},
 
@@ -52,6 +62,14 @@ const game = {
 		if (gameEngine.running) {
 			gameEngine.update(delta);
 		}
+		if (!gameEngine.running && this.running) {
+			this.onPause();
+		}
+		this.running = gameEngine.running;
+	},
+
+	onPause: function() {
+		gameAudio.pauseMusic();
 	},
 
 	createPlayer: function(index, color, x, y) {

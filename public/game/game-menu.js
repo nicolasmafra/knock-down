@@ -12,7 +12,7 @@ const gameMenu = {
                     children: {
                         "start": {
                             title: "Iniciar",
-                            action: () => this.backToMainMenu(),
+                            action: () => this.prestart(),
                         }
                     }
                 },
@@ -86,6 +86,11 @@ const gameMenu = {
                 },
             }
         };
+    },
+
+    prestart: function() {
+        game.prestart();
+        this.backToMainMenu();
     },
 
     backToMainMenu: function() {
