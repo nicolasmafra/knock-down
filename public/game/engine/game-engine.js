@@ -1,3 +1,6 @@
+import * as CANNON from 'cannon';
+import * as THREE from 'three';
+
 import gameGfx from './game-gfx.js';
 import gameInput from './game-input.js';
 import gamePhysics from './game-physics.js';
@@ -5,6 +8,10 @@ import looper from '../../libs/looper.js';
 import gameMenu from '../game-menu.js';
 
 const gameEngine = {
+
+	upVector: new CANNON.Vec3(0, 0, 1),
+	geometryRotation: new CANNON.Quaternion().setFromVectors(new CANNON.Vec3(0, 1, 0), new CANNON.Vec3(0, 0, 1)),
+	inverseGeometryRotation: new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0), -Math.PI/2),
 
 	container: document.getElementsByClassName('game-container')[0],
 	guiElement: document.getElementById('GAME_GUI'),

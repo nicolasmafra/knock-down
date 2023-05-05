@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const horizontalDistance = 8;
+const horizontalDistance = 9;
 const verticalDistance = 13;
 const angle = 0.18 * Math.PI;
 

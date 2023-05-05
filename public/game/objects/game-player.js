@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon';
 
+import gameEngine from '../engine/game-engine.js';
 import gamePhysics from '../engine/game-physics.js';
 import gameInput from '../engine/game-input.js';
 
@@ -15,9 +16,6 @@ const minZ = -3*height;
 const maxSpeed = 10.0;
 const canMoveOnAir = false;
 
-const rotation = new CANNON.Quaternion().setFromAxisAngle(new CANNON.Vec3(1,0,0), Math.PI/2);
-const inverseRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0), -Math.PI/2);
-
 const jumpImpulse = new CANNON.Vec3(0, 0, jumpMagnitude);
 
 const headGeometry = new THREE.CylinderGeometry(headRadius, headRadius, headHeight);
@@ -25,7 +23,7 @@ const bodyGeometry = new THREE.ConeGeometry(width/2, bodyHeight);
 
 export default class GamePlayer {
 
-  relativeRotation = inverseRotation;
+  relativeRotation = gameEngine.inverseGeometryRotation;
   bodiesBelow = [];
   fallen = false;
 
@@ -51,7 +49,7 @@ export default class GamePlayer {
       linearDamping: 0.05,
       mass: 70,
     });
-    this.body.quaternion.copy(rotation);
+    this.body.quaternion.copy(gameEngine.geometryRotation);
     this.body.position.set(x, y, height);
     this.body.userData = this;
   }
@@ -62,12 +60,12 @@ export default class GamePlayer {
     const head = new THREE.Mesh(headGeometry, material);
     head.castShadow = true;
     head.position.z = height/2 - headRadius;
-    head.quaternion.copy(rotation);
+    head.quaternion.copy(gameEngine.geometryRotation);
 
     const body = new THREE.Mesh(bodyGeometry, material);
     body.castShadow = true;
     body.position.z = -height/2 + bodyHeight/2;
-    body.quaternion.copy(rotation);
+    body.quaternion.copy(gameEngine.geometryRotation);
 
     this.mesh = new THREE.Mesh();
     this.mesh.add(head);

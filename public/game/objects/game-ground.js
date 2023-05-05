@@ -7,31 +7,31 @@ export default class GameGround {
   mesh = null;
   hasOutline = true;
 
-  constructor(size, position, angle) {
-    this.#createBody(size, position);
-    this.#createMesh(size);
-    if (angle) {
-      this.body.quaternion.setFromAxisAngle(gamePhysics.upVector, angle);
-      this.body.quaternion.vmult(this.body.position, this.body.position);
+  constructor(shape, geometry, position, rotation) {
+    this.#createBody(shape, position);
+    this.#createMesh(geometry);
+    if (rotation) {
+      this.body.quaternion.copy(rotation);
+      //this.body.quaternion.vmult(this.body.position, this.body.position);
     }
   }
 
-  #createBody(size, position) {
+  #createBody(shape, position) {
     if (!position) position = new CANNON.Vec3();
     
     this.body = new CANNON.Body({
       type: CANNON.Body.STATIC,
       material: gamePhysics.material,
     });
-    const shape = new CANNON.Box(new CANNON.Vec3(size.x/2, size.y/2, size.z/2));
+    //const shape = new CANNON.Box(new CANNON.Vec3(size.x/2, size.y/2, size.z/2));
     this.body.addShape(shape);
     this.body.position.set(position.x, position.y, position.z);
     this.body.userData = this;
   }
 
-  #createMesh(size) {
+  #createMesh(geometry) {
     this.mesh = new THREE.Mesh(
-        new THREE.BoxGeometry(size.x, size.y, size.z),
+      geometry,//new THREE.BoxGeometry(size.x, size.y, size.z),
         new THREE.MeshLambertMaterial({ color: 0x00ff00 })
     );
     this.mesh.receiveShadow = true;

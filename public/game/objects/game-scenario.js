@@ -7,58 +7,48 @@ import gameGfx from '../engine/game-gfx.js';
 import GameGround from './game-ground.js';
 
 const playerWidth = 1.2;
-const playerJumpHeigth = 1.5;
-const scenarioWidth = 10;
-const wallWidth = scenarioWidth/2 - playerWidth;
-const wallHeight = 2*playerJumpHeigth;
-const wallDepth = 1;
-const wallDistance = wallWidth/2 + playerWidth/2;
-const n = 4;
-const wallRadialDistance = n*scenarioWidth/8 + wallDepth/2;
+const playerJumpHeigth = 2.55;
+
+const n = 8;
+const scenarioRadius = 6;
+
+const wallInternalRadialDistance = scenarioRadius - playerWidth;
+const wallRadialDistance = scenarioRadius - playerWidth/2;
+const wallWidth = 2*Math.PI*wallInternalRadialDistance/n - playerWidth;
+const wallHeight = 1.0*playerJumpHeigth;
+const wallDepth = playerWidth;
+
+const pilarHeight = 0.8*playerJumpHeigth;
 
 export default class GameScenario {
   grounds = [];
 
   constructor() {
     
-    for (var i = 0; i < 8; i++) {
-      let angle = i * 2*Math.PI/n;
-      this.#addWallsAtAngle(angle);
+    for (var i = 0; i < n; i++) {
+      let angle = (i+0.5) * 2*Math.PI/n;
+      const rotation = new CANNON.Quaternion().setFromAxisAngle(gameEngine.upVector, angle);
+      const position = new CANNON.Vec3(-wallRadialDistance, 0, wallHeight/2);
+      rotation.vmult(position, position);
+      this.grounds.push(new GameGround(
+        new CANNON.Box(new CANNON.Vec3(wallDepth/2, wallWidth/2, wallHeight/2)),
+        new THREE.BoxGeometry(wallDepth, wallWidth, wallHeight),
+        position,
+        rotation))
     }
 
     this.grounds.push(new GameGround(
-      new CANNON.Vec3(scenarioWidth, scenarioWidth, 0.2),
+      new CANNON.Cylinder(scenarioRadius, scenarioRadius, 0.2),
+      new THREE.CylinderGeometry(scenarioRadius, scenarioRadius, 0.2),
       new CANNON.Vec3(0, 0, 0.1),
-      0)
+      gameEngine.geometryRotation)
     );
     this.grounds.push(new GameGround(
-      new CANNON.Vec3(playerWidth, playerWidth, playerJumpHeigth),
-      new CANNON.Vec3(0, 0, playerJumpHeigth/2),
-      Math.PI/4)
+      new CANNON.Box(new CANNON.Vec3(playerWidth/2, playerWidth/2, pilarHeight/2)),
+      new THREE.BoxGeometry(playerWidth, playerWidth, pilarHeight),
+      new CANNON.Vec3(0, 0, pilarHeight/2),
+      new CANNON.Quaternion().setFromAxisAngle(gameEngine.upVector, Math.PI/4))
     );
-  }
-
-  #addWallsAtAngle(angle) {
-
-    const groundWidth = 0.3*scenarioWidth;
-    const groundLength = scenarioWidth - groundWidth;
-    /*this.#createGround(angle,
-      new CANNON.Vec3(groundWidth, groundLength, 0.2),
-      new CANNON.Vec3(-scenarioWidth/2 + groundWidth/2, -scenarioWidth/2 + groundLength/2, 0.1)
-    );*/
-    this.#createGround(angle,
-      new CANNON.Vec3(wallDepth, wallWidth, wallHeight),
-      new CANNON.Vec3(-wallRadialDistance, wallDistance, wallHeight/2)
-    );
-    this.#createGround(angle,
-      new CANNON.Vec3(wallDepth, wallWidth, wallHeight),
-      new CANNON.Vec3(-wallRadialDistance, -wallDistance, wallHeight/2)
-    );
-  }
-
-  #createGround(angle, size, position) {
-    const ground = new GameGround(size, position, angle);
-    this.grounds.push(ground);
   }
 
   addToGame() {
