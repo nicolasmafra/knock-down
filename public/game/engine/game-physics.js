@@ -32,6 +32,9 @@ const gamePhysics = {
 		if (object.body) {
 			object.mesh.position.copy(object.body.position);
 			object.mesh.quaternion.copy(object.body.quaternion);
+			if (object.relativeRotation) {
+				object.mesh.quaternion.multiply(object.relativeRotation);
+			}
 		}
 	},
 

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const horizontalDistance = 9;
+const horizontalDistance = 8;
 const verticalDistance = 13;
 const angle = 0.18 * Math.PI;
 
@@ -42,7 +42,9 @@ const gameGfx = {
 	
 	addObject: function(object) {
 		this.scene.add(object.mesh);
-		this.addOutline(object.mesh);
+		if (object.hasOutline) {
+			this.addOutline(object.mesh);
+		}
 	},
 
 	removeObject: function(object) {
@@ -51,7 +53,7 @@ const gameGfx = {
 
 	addOutline: function(mesh) {
 		const outline = new THREE.Mesh(mesh.geometry, outlineMaterial);
-		outline.scale.multiplyScalar(1.05);
+		outline.scale.multiplyScalar(1.03);
 		mesh.add(outline);
 	},
 

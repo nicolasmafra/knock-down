@@ -5,6 +5,7 @@ import gamePhysics from '../engine/game-physics.js';
 export default class GameGround {
   body = null;
   mesh = null;
+  hasOutline = true;
 
   constructor(size, position, angle) {
     this.#createBody(size, position);
@@ -34,6 +35,7 @@ export default class GameGround {
         new THREE.MeshLambertMaterial({ color: 0x00ff00 })
     );
     this.mesh.receiveShadow = true;
+    this.mesh.castShadow = true;
     this.mesh.userData = this;
   }
 }
