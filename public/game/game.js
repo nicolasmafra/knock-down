@@ -43,6 +43,10 @@ const game = {
 		gameEngine.start();
 	},
 
+	resume: function() {
+		gameEngine.resume();
+	},
+
 	update: function(delta) {
 		gamepadMenu.checkMenuInput();
 		if (gameEngine.running) {

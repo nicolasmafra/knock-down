@@ -37,6 +37,19 @@ const gameMenu = {
                         }
                     }
                 },
+                "pause": {
+                    title: "Pausa",
+                    children: {
+                        "continue": {
+                            title: "Continuar",
+                            action: () => this.resumeGame(),
+                        },
+                        "giveup": {
+                            title: "Abandonar",
+                            action: () => menuLib.setCurrentMenu(['select-scenario']),
+                        }
+                    }
+                },
                 "select-scenario": {
                     title: "Selecione o cenário",
                     children: {
@@ -94,6 +107,11 @@ const gameMenu = {
         game.start();
     },
 
+    resumeGame: function() {
+        menuLib.hide();
+        game.resume();
+    },
+
     show: function() {
         menuLib.show();
     },
@@ -102,6 +120,12 @@ const gameMenu = {
         menuLib.selected = -1;
         menuLib.data.children.message.title = message;
         menuLib.setCurrentMenu(['message']);
+        menuLib.show();
+    },
+
+    pause: function() {
+        menuLib.selected = -1;
+        menuLib.setCurrentMenu(['pause']);
         menuLib.show();
     },
 };

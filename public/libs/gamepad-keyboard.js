@@ -9,7 +9,7 @@ const keyboardSchema = {
 		'F',
 		'V',
 		'Shift',
-		'Enter',
+		'Escape',
 		'G',
 		'B',
 		'ArrowUp',

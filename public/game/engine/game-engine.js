@@ -68,10 +68,19 @@ const gameEngine = {
 		this.minPlayerCount = this.playerCount == 1 ? 1 : 2;
 		this.running = true;
 	},
+
+	resume: function() {
+		this.running = true;
+	},
 	
 	update: function(delta) {
 		gameInput.listen();
 
+		if (this.players.some(player => player.input.escape)) {
+			this.stop();
+			gameMenu.pause();
+			return;
+		}
 		this.players.forEach(player => player.update());
 		this.gem.update();
 		if (this.gem.timeIsOver()) {
@@ -138,7 +147,6 @@ const gameEngine = {
 
 	stop: function() {
 		this.running = false;
-		//gameMenu.show();
 	},
 };
 
