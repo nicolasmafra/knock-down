@@ -35,8 +35,11 @@ export default class GamePlayer {
     this.#createMesh(color);
 
     this.body.addEventListener('collide', (event) => {
+      let another = gamePhysics.inContact(event.contact, this.body);
+      if (another.userData && another.userData.ignoreContact) return;
+      
       if (gamePhysics.bodyIsOver(event.contact, this.body)) {
-        this.bodiesBelow.push(gamePhysics.inContact(event.contact, this.body));
+        this.bodiesBelow.push(another);
       }
     });
   }

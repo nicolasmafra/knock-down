@@ -3,13 +3,14 @@ import * as CANNON from 'cannon';
 import gamePhysics from '../engine/game-physics.js';
 import GamePlayer from './game-player.js';
 
-const initialPosition = new CANNON.Vec3(0, 0, 3.0);
 const meshRadius = 0.3;
 const bodyRadius = 0.5;
 const rotationSpeed = 0.05;
 const rotation = new CANNON.Quaternion().setFromAxisAngle(new CANNON.Vec3(0, 0, 1), rotationSpeed);
 
 export default class GameGem {
+  initialPosition = new CANNON.Vec3(0, 0, 5.0);
+  ignoreContact = true;
   maxTime = 15;
   body = null;
   mesh = null;
@@ -34,11 +35,11 @@ export default class GameGem {
   #createBody() {
     this.body = new CANNON.Body({
       shape: new CANNON.Sphere(bodyRadius),
-      mass: 1,
+      mass: 0.001,
       linearDamping: 1.0,
       angularDamping: 1.0,
     });
-    this.body.position.copy(initialPosition);
+    this.body.position.copy(this.initialPosition);
     this.body.userData = this;
   }
 
@@ -59,7 +60,7 @@ export default class GameGem {
       this.body.position.z += 1.8;
       this.time += gamePhysics.timeUnit;
     } else {
-      this.body.position.copy(initialPosition);
+      this.body.position.copy(this.initialPosition);
     }
     const colorIntensity = this.time/this.maxTime;
     this.mesh.material.color.r = colorIntensity;
