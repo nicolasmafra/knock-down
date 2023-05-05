@@ -4,7 +4,8 @@ import gamePhysics from '../engine/game-physics.js';
 import GamePlayer from './game-player.js';
 
 const initialPosition = new CANNON.Vec3(0, 0, 3.0);
-const radius = 0.3;
+const meshRadius = 0.3;
+const bodyRadius = 0.5;
 const rotationSpeed = 0.05;
 const rotation = new CANNON.Quaternion().setFromAxisAngle(new CANNON.Vec3(0, 0, 1), rotationSpeed);
 
@@ -23,7 +24,7 @@ export default class GameGem {
 
   #createMesh() {
     this.mesh = new THREE.Mesh(
-        new THREE.OctahedronGeometry(radius),
+        new THREE.OctahedronGeometry(meshRadius),
         new THREE.MeshLambertMaterial({ color: this.color })
     );
     this.mesh.castShadow = true;
@@ -32,9 +33,10 @@ export default class GameGem {
 
   #createBody() {
     this.body = new CANNON.Body({
-      shape: new CANNON.Sphere(radius),
+      shape: new CANNON.Sphere(bodyRadius),
       mass: 1,
       linearDamping: 1.0,
+      angularDamping: 1.0,
     });
     this.body.position.copy(initialPosition);
     this.body.userData = this;
