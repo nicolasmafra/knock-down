@@ -7,19 +7,28 @@ const gameMenu = {
         menuLib.data = {
             title: "root",
             children: {
-                "main": {
+                "welcome": {
                     title: "Bem vindo ao Knock Down",
                     children: {
+                        "start": {
+                            title: "Iniciar",
+                            action: () => this.backToMainMenu(),
+                        }
+                    }
+                },
+                "main": {
+                    title: "Quantas pessoas irão jogar?",
+                    children: {
                         "2-players": {
-                            title: "2 Players",
+                            title: "2 Jogadores",
                             action: () => this.selectPlayerCount(2),
                         },
                         "3-players": {
-                            title: "3 Players",
+                            title: "3 Jogadores",
                             action: () => this.selectPlayerCount(3),
                         },
                         "4-players": {
-                            title: "4 Players",
+                            title: "4 Jogadores",
                             action: () => this.selectPlayerCount(4),
                         },
                     }
@@ -85,7 +94,7 @@ const gameMenu = {
 
     start: function() {
         menuLib.start();
-        this.backToMainMenu();
+        menuLib.setCurrentMenu(['welcome']);
     },
 
     selectPlayerCount: function(playerCount) {

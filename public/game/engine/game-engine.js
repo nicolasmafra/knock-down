@@ -107,13 +107,13 @@ const gameEngine = {
 
 	gameOver: function(winner) {
 		if (winner) {
-			this.showMessage("Winner: " + winner.name);
+			this.showMessage("Vencedor: " + winner.name);
 
 			if (!this.score[winner.name]) this.score[winner.name] = 0;
 
 			this.score[winner.name]++;
 		} else {
-			this.showMessage("Draw");
+			this.showMessage("Empate");
 		}
 		this.stop();
 	},
@@ -123,17 +123,16 @@ const gameEngine = {
 			let text = "";
 			//text += "FPS: " + looper.getFpsAverage().toFixed(2) + "<br>";
 			for (const [playerName, score] of Object.entries(this.score)) {
-				text += playerName + ": " + score + " points<br>";
+				text += playerName + ": " + score + " pontos<br>";
 			}
 			if (this.gem.time > 0) {
-				text += "Time: " + (this.gem.maxTime - this.gem.time).toFixed(0) + "<br>";
+				text += "Tempo restante: " + (this.gem.maxTime - this.gem.time).toFixed(0) + "<br>";
 			}
 			this.guiElement.innerHTML = text;
 		}
 	},
 
 	removePlayer: function(player) {
-		console.log("Player " + player.index + " fell.");
 		if (this.gem.player == player) {
 			this.gem.reset();
 		}
