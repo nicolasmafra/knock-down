@@ -24,12 +24,7 @@ export default class IslandScenario {
     this.#placeLineOfIslands(yDistance);
     this.#placeLineOfIslands(-yDistance);
 
-    this.grounds.push(new GameGround(
-      new CANNON.Cylinder(islandRadius, islandRadius, 0.2),
-      new THREE.CylinderGeometry(islandRadius, islandRadius, 0.2),
-      new CANNON.Vec3(0, 0, 0.1),
-      gameEngine.geometryRotation)
-    );
+    this.grounds.push(GameGround.createCylinder(islandRadius, 0.2, new CANNON.Vec3(0, 0, 0.1)));
   }
 
   #placeLineOfIslands(y) {
@@ -38,12 +33,7 @@ export default class IslandScenario {
     for (var i = 0; i < n; i++) {
       const x = -totalSpace/2 + i * islandDistance;
       const position = new CANNON.Vec3(x, y, 0.1);
-      this.grounds.push(new GameGround(
-        new CANNON.Cylinder(islandRadius, islandRadius, 0.2),
-        new THREE.CylinderGeometry(islandRadius, islandRadius, 0.2),
-        position,
-        gameEngine.geometryRotation)
-      );
+      this.grounds.push(GameGround.createCylinder(islandRadius, 0.2, position));
     }
   }
 

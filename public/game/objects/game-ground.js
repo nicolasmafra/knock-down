@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon';
+import gameEngine from '../engine/game-engine.js';
 
 export default class GameGround {
   body = null;
@@ -17,6 +18,18 @@ export default class GameGround {
     if (rotation) {
       this.body.quaternion.copy(rotation);
     }
+  }
+
+  static createBox(sizeX, sizeY, sizeZ, position, rotation) {
+    let shape = new CANNON.Box(new CANNON.Vec3(sizeX/2, sizeY/2, sizeZ/2));
+    let geometry = new THREE.BoxGeometry(sizeX, sizeY, sizeZ);
+    return new GameGround(shape, geometry, position, rotation);
+  }
+
+  static createCylinder(radius, height, position) {
+    let shape = new CANNON.Cylinder(radius, radius, height);
+    let geometry = new THREE.CylinderGeometry(radius, radius, height);
+    return new GameGround(shape, geometry, position, gameEngine.geometryRotation);
   }
 
   static setAsGrass() {

@@ -39,25 +39,11 @@ export default class CircleScenario {
       const rotation = new CANNON.Quaternion().setFromAxisAngle(gameEngine.upVector, angle);
       const position = new CANNON.Vec3(-wallRadialDistance, 0, wallHeight/2);
       rotation.vmult(position, position);
-      this.grounds.push(new GameGround(
-        new CANNON.Box(new CANNON.Vec3(wallDepth/2, wallWidth/2, wallHeight/2)),
-        new THREE.BoxGeometry(wallDepth, wallWidth, wallHeight),
-        position,
-        rotation))
+      this.grounds.push(GameGround.createBox(wallDepth, wallWidth, wallHeight, position, rotation));
     }
 
-    this.grounds.push(new GameGround(
-      new CANNON.Cylinder(scenarioRadius, scenarioRadius, 0.2),
-      new THREE.CylinderGeometry(scenarioRadius, scenarioRadius, 0.2),
-      new CANNON.Vec3(0, 0, 0.1),
-      gameEngine.geometryRotation)
-    );
-    this.grounds.push(new GameGround(
-      new CANNON.Cylinder(pilarRadius, pilarRadius, pilarHeight),
-      new THREE.CylinderGeometry(pilarRadius, pilarRadius, pilarHeight),
-      new CANNON.Vec3(0, 0, pilarHeight/2),
-      gameEngine.geometryRotation)
-    );
+    this.grounds.push(GameGround.createCylinder(scenarioRadius, 0.2, new CANNON.Vec3(0, 0, 0.1)));
+    this.grounds.push(GameGround.createCylinder(pilarRadius, pilarHeight, new CANNON.Vec3(0, 0, pilarHeight/2)));
   }
 
   addToGame() {

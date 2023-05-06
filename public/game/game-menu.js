@@ -69,13 +69,13 @@ const gameMenu = {
                 "select-scenario": {
                     title: "Selecione o cenário",
                     children: {
-                        "circle4grass": {
-                            title: "Quadrado",
-                            action: () => this.selectCircleScenario(4, false),
-                        },
                         "circle8ice": {
                             title: "Pista de gelo",
                             action: () => this.selectCircleScenario(8, true),
+                        },
+                        "circle4grass": {
+                            title: "Quadrado",
+                            action: () => this.selectCircleScenario(4, false),
                         },
                         "island": {
                             title: "Ilhas",
