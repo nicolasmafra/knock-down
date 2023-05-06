@@ -1,6 +1,9 @@
 import menuLib from '../libs/menu-lib.js';
 import game from './game.js';
 
+import CircleScenario from './objects/scenarios/CircleScenario.js';
+import IslandScenario from './objects/scenarios/IslandScenario.js';
+
 const gameMenu = {
     configure: function() {
         menuLib.stackMin = 1;
@@ -65,21 +68,17 @@ const gameMenu = {
                 "select-scenario": {
                     title: "Selecione o cenário",
                     children: {
-                        "size-x": {
-                            title: "Aleatório",
-                            action: () => this.selectScenarioSize(-1),
-                        },
-                        "size-4": {
+                        "circle4": {
                             title: "Quadrado",
-                            action: () => this.selectScenarioSize(4),
+                            action: () => this.selectCircleScenario(4),
                         },
-                        "size-6": {
-                            title: "Hexágono",
-                            action: () => this.selectScenarioSize(6),
-                        },
-                        "size-8": {
+                        "circle8": {
                             title: "Octágono",
-                            action: () => this.selectScenarioSize(8),
+                            action: () => this.selectCircleScenario(8),
+                        },
+                        "island4": {
+                            title: "Ilhas",
+                            action: () => this.selectIslandScenario(),
                         },
                         "back": {
                             title: "Voltar",
@@ -110,12 +109,13 @@ const gameMenu = {
         menuLib.setCurrentMenu(['select-scenario']);
     },
 
-    selectScenarioSize: function(n) {
-        if (n < 0) {
-            let items = [4,6,8];
-            n = items[Math.floor(Math.random()*items.length)];
-        }
-        game.scenarioSize = n;
+    selectCircleScenario: function(n) {
+		game.scenario = new CircleScenario(n);
+        this.playGame();
+    },
+
+    selectIslandScenario: function(n) {
+		game.scenario = new IslandScenario();
         this.playGame();
     },
 

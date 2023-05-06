@@ -10,7 +10,7 @@ export default {
         this.loadAudio('falling', 'falling-whistle-swish-1-84769.mp3', 1);
         this.loadAudio('jump', 'cartoon-jump-6462.mp3', 1);
         this.loadAudio('gem', 'coin-pickup-98269.mp3', 1);
-        this.loadAudio('clock', 'time-passing-sound-effect-fast-clock-108403.mp3', 0.8);
+        this.loadAudio('clock', 'time-passing-sound-effect-fast-clock-108403.mp3', 1);
     },
 
     loadAudio(name, audioFileName, initialVolume) {

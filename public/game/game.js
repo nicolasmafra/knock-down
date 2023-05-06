@@ -4,7 +4,6 @@ import gamepadMenu from '../libs/gamepad-menu.js';
 import gameAudio from './engine/game-audio.js';
 import gameMenu from './game-menu.js';
 
-import GameScenario from './objects/game-scenario.js';
 import GamePlayer from './objects/game-player.js';
 import GameGem from './objects/game-gem.js';
 
@@ -12,7 +11,6 @@ const game = {
 
 	playerCount: 2,
 	players: [],
-	scenarioSize: 8,
 	scenario: null,
 	gem: null,
 	running: false,
@@ -36,7 +34,6 @@ const game = {
 		gameEngine.playerCount = this.playerCount;
 		gameEngine.preStart();
 		
-		this.scenario = new GameScenario(this.scenarioSize);
 		gameEngine.addToGame(this.scenario);
 
 		this.players = [];
@@ -45,7 +42,7 @@ const game = {
 		if (this.playerCount >= 3) this.createPlayer(2, 0xff0000, -3, 3);
 		if (this.playerCount >= 4) this.createPlayer(2, 0xffff00, 3, -3);
 
-		this.gem = new GameGem();
+		this.gem = new GameGem(this.scenario.gemInitialPosition);
 		gameEngine.addToGame(this.gem);
 		
 		gameEngine.gem = this.gem;

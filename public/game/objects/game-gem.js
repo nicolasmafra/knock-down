@@ -8,6 +8,7 @@ const meshRadius = 0.3;
 const bodyRadius = 0.5;
 const rotationSpeed = 0.05;
 const rotation = new CANNON.Quaternion().setFromAxisAngle(new CANNON.Vec3(0, 0, 1), rotationSpeed);
+const colorLightness = 0.8;
 
 export default class GameGem {
   initialPosition = new CANNON.Vec3(0, 0, 5.0);
@@ -17,9 +18,11 @@ export default class GameGem {
   mesh = null;
   player = null;
   time = 0;
-  color = new THREE.Color(0, 0.5, 0.5);
+  color = new THREE.Color(colorLightness, colorLightness, colorLightness);
 
-  constructor() {
+  constructor(initialPosition) {
+    if (initialPosition) this.initialPosition = initialPosition;
+
     this.#createBody();
     this.#createMesh();
   }
@@ -70,9 +73,9 @@ export default class GameGem {
       this.body.position.copy(this.initialPosition);
     }
     const colorIntensity = this.time/this.maxTime;
-    this.mesh.material.color.r = colorIntensity;
-    this.mesh.material.color.g = (1 - colorIntensity)/2;
-    this.mesh.material.color.b = (1 - colorIntensity)/2;
+    this.mesh.material.color.r = colorLightness + (1-colorLightness)*colorIntensity;
+    this.mesh.material.color.g = colorLightness*(1-colorIntensity);
+    this.mesh.material.color.b = colorLightness*(1-colorIntensity);
     gamePhysics.updateMesh(this);
   }
 

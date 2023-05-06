@@ -6,13 +6,13 @@ export default class GameGround {
   body = null;
   mesh = null;
   hasOutline = true;
+  static color = 0x00ff00;
 
   constructor(shape, geometry, position, rotation) {
     this.#createBody(shape, position);
     this.#createMesh(geometry);
     if (rotation) {
       this.body.quaternion.copy(rotation);
-      //this.body.quaternion.vmult(this.body.position, this.body.position);
     }
   }
 
@@ -23,7 +23,6 @@ export default class GameGround {
       type: CANNON.Body.STATIC,
       material: gamePhysics.material,
     });
-    //const shape = new CANNON.Box(new CANNON.Vec3(size.x/2, size.y/2, size.z/2));
     this.body.addShape(shape);
     this.body.position.set(position.x, position.y, position.z);
     this.body.userData = this;
@@ -31,8 +30,8 @@ export default class GameGround {
 
   #createMesh(geometry) {
     this.mesh = new THREE.Mesh(
-      geometry,//new THREE.BoxGeometry(size.x, size.y, size.z),
-        new THREE.MeshLambertMaterial({ color: 0x00ff00 })
+      geometry,
+      new THREE.MeshLambertMaterial({ color: GameGround.color })
     );
     this.mesh.receiveShadow = true;
     this.mesh.castShadow = true;

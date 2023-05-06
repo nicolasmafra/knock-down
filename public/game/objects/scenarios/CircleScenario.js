@@ -1,10 +1,11 @@
 import * as CANNON from 'cannon';
 import * as THREE from 'three';
 
-import gameEngine from '../engine/game-engine.js';
-import gameGfx from '../engine/game-gfx.js';
+import gameEngine from '../../engine/game-engine.js';
+import gamePhysics from '../../engine/game-physics.js';
+import gameGfx from '../../engine/game-gfx.js';
 
-import GameGround from './game-ground.js';
+import GameGround from '../game-ground.js';
 
 const playerWidth = 0.7;
 const playerJumpHeigth = 2.55;
@@ -19,11 +20,12 @@ const wallHoleWidth = 2.0*playerWidth;
 const wallHeight = 1.1*playerJumpHeigth;
 const wallDepth = 0.5*playerWidth;
 
-export default class GameScenario {
+export default class CircleScenario {
   grounds = [];
 
   constructor(n) {
 
+    GameGround.color = 0xbaf2ef;
     const wallInternalRadialDistance = scenarioRadius - wallDepth;
     const wallRadialDistance = scenarioRadius - wallDepth/2;
     const wallWidth = 2*Math.PI*wallInternalRadialDistance/n - wallHoleWidth;
@@ -56,7 +58,8 @@ export default class GameScenario {
   }
 
   addToGame() {
-		gameGfx.scene.background = new THREE.Color("cyan");
+    gamePhysics.material.friction = 0.03;
+		gameGfx.scene.background = new THREE.Color(0x001030);
 
     this.grounds.forEach(ground => gameEngine.addToGame(ground));
   }

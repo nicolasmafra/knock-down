@@ -96,13 +96,7 @@ export default class GamePlayer {
     if (this.fallingEffect) return;
     if (this.body.velocity.z >= 0) return;
 
-    if (this.body.position.z < height/3) {
-      return this.#setFallingEffect();
-    }
-    const x = this.body.position.x;
-    const y = this.body.position.y;
-    const d2 = x*x + y*y;
-    if (d2 > maxD2) {
+    if (this.body.position.z < height/2 - 0.1) {
       return this.#setFallingEffect();
     }
   }

@@ -8,4 +8,8 @@ body {
 
 .game-gui {
 	color: black;
+	background-color: aliceblue;
+	padding: 10px;
+	display: inline-block;
+	line-height: 1.5;
 }

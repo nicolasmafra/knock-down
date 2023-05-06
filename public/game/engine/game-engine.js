@@ -128,6 +128,7 @@ const gameEngine = {
 			if (this.gem.time > 0) {
 				text += "Tempo restante: " + (this.gem.maxTime - this.gem.time).toFixed(0) + "<br>";
 			}
+			if (text === "") text = "...";
 			this.guiElement.innerHTML = text;
 		}
 	},
