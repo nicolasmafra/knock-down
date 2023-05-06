@@ -34,6 +34,7 @@ export default class GamePlayer {
 		friction: 0.04,
 		restitution: 0.1,
 	});
+  jumped = false;
 
   constructor(index, color, x, y) {
     this.index = index;
@@ -112,9 +113,12 @@ export default class GamePlayer {
     if (this.bodiesBelow.length > 0 || canMoveOnAir) {
       this.#move();
     }
-    if (this.bodiesBelow.length > 0 && this.input.jump) {
+    if (this.bodiesBelow.length > 0 && this.input.jump && !this.jumped) {
       this.#jump();
       this.bodiesBelow = [];
+      this.jumped = true;
+    } else if (!this.input.jump) {
+      this.jumped = false;
     }
     gamePhysics.clampHorizontalVelocity(this.body, maxSpeed);
   }
