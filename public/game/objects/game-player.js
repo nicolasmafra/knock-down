@@ -4,6 +4,7 @@ import * as CANNON from 'cannon';
 import gameEngine from '../engine/game-engine.js';
 import gamePhysics from '../engine/game-physics.js';
 import gameInput from '../engine/game-input.js';
+import gameAudio from '../engine/game-audio.js';
 
 const width = 0.8;
 const height = 1.7;
@@ -12,9 +13,12 @@ const headHeight = 0.6;
 const bodyHeight = 1.5;
 const moveMagnitude = 20.0;
 const jumpMagnitude = 500.0;
-const minZ = -3*height;
 const maxSpeed = 10.0;
 const canMoveOnAir = false;
+
+const minZ = -3*height;
+const maxDistance = 8;
+const maxD2 = maxDistance*maxDistance;
 
 const jumpImpulse = new CANNON.Vec3(0, 0, jumpMagnitude);
 
@@ -26,6 +30,8 @@ export default class GamePlayer {
   relativeRotation = gameEngine.inverseGeometryRotation;
   bodiesBelow = [];
   fallen = false;
+  /** @type CANNON.Body */
+  body = null;
 
   constructor(index, color, x, y) {
     this.index = index;
@@ -77,12 +83,32 @@ export default class GamePlayer {
   }
 
   update() {
+    this.checkFallingEffect();
     if (this.checkFallen()) {
       return;
     }
     if (this.input) {
       this.#applyInput();
     }
+  }
+
+  checkFallingEffect() {
+    if (this.fallingEffect) return;
+    if (this.body.velocity.z >= 0) return;
+
+    if (this.body.position.z < height/3) {
+      return this.#setFallingEffect();
+    }
+    const x = this.body.position.x;
+    const y = this.body.position.y;
+    const d2 = x*x + y*y;
+    if (d2 > maxD2) {
+      return this.#setFallingEffect();
+    }
+  }
+
+  #setFallingEffect() {
+    this.fallingEffect = gameAudio.playEffect('falling');
   }
 
   #applyInput() {
@@ -107,6 +133,7 @@ export default class GamePlayer {
 
   #jump() {
     this.body.applyImpulse(jumpImpulse);
+    gameAudio.playEffect('jump');
   }
 
   checkFallen() {

@@ -2,6 +2,7 @@ import looper from '../../libs/looper.js';
 import gameEngine from './engine/game-engine.js';
 import gamepadMenu from '../libs/gamepad-menu.js';
 import gameAudio from './engine/game-audio.js';
+import gameMenu from './game-menu.js';
 
 import GameScenario from './objects/game-scenario.js';
 import GamePlayer from './objects/game-player.js';
@@ -21,7 +22,7 @@ const game = {
 		gameEngine.configure();
 		looper.saveFpsHistory = true;
 		looper.renderFunction = (delta) => this.update(delta);
-        looper.exceptionFunction = (e) => this.showMessage("Error: " + e.message);
+        looper.exceptionFunction = (e) => gameMenu.showError("Error: " + e.message);
 		looper.start();
 	},
 
@@ -30,6 +31,7 @@ const game = {
 	},
 
 	start: function() {
+		gameAudio.stopEffects();
 		gameAudio.playMusic();
 		this.running = true;
 		gameEngine.playerCount = this.playerCount;

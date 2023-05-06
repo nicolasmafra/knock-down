@@ -33,7 +33,7 @@ const gameMenu = {
                         },
                     }
                 },
-                "message": {
+                "gameOver": {
                     title: "XXX",
                     children: {
                         "again": {
@@ -45,6 +45,9 @@ const gameMenu = {
                             action: () => menuLib.setCurrentMenu(['select-scenario']),
                         }
                     }
+                },
+                "error": {
+                    title: "XXX"
                 },
                 "pause": {
                     title: "Pausa",
@@ -132,8 +135,14 @@ const gameMenu = {
 
     showMessage: function(message) {
         menuLib.selected = -1;
-        menuLib.data.children.message.title = message;
-        menuLib.setCurrentMenu(['message']);
+        menuLib.data.children.gameOver.title = message;
+        menuLib.setCurrentMenu(['gameOver']);
+        menuLib.show();
+    },
+
+    showError: function(message) {
+        menuLib.data.children.error.title = message;
+        menuLib.setCurrentMenu(['error']);
         menuLib.show();
     },
 
