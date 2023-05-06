@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon';
 import gamePhysics from '../engine/game-physics.js';
+import gameAudio from '../engine/game-audio.js';
 import GamePlayer from './game-player.js';
 
 const meshRadius = 0.3;
@@ -47,10 +48,16 @@ export default class GameGem {
     this.body.addEventListener('collide', (event) => {
       let object = gamePhysics.inContact(event.contact, this.body);
       if (object.userData instanceof GamePlayer) {
-        this.player = object.userData;
-        this.time = 0;
+        this.playerPickup(object.userData);
       }
     });
+  }
+
+  playerPickup(player) {
+    this.player = player;
+    this.time = 0;
+    gameAudio.playEffect('gem');
+    gameAudio.playEffect('clock');
   }
 
   update() {

@@ -18,7 +18,6 @@ const game = {
 	running: false,
 
 	configure: function() {
-		gameAudio.configure();
 		gameEngine.configure();
 		looper.saveFpsHistory = true;
 		looper.renderFunction = (delta) => this.update(delta);
@@ -27,7 +26,7 @@ const game = {
 	},
 
 	prestart: function() {
-		//gameAudio.playMusic();
+		gameAudio.configure();
 	},
 
 	start: function() {

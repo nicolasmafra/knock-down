@@ -9,12 +9,19 @@ export default {
         this.loadAudio('music', 'catch-it-117676.mp3', 0.6);
         this.loadAudio('falling', 'falling-whistle-swish-1-84769.mp3', 1);
         this.loadAudio('jump', 'cartoon-jump-6462.mp3', 1);
+        this.loadAudio('gem', 'coin-pickup-98269.mp3', 1);
+        this.loadAudio('clock', 'time-passing-sound-effect-fast-clock-108403.mp3', 0.8);
     },
 
     loadAudio(name, audioFileName, initialVolume) {
+        if (this.audioInfos[name]) {
+            return;
+        }
         const audio = document.createElement("audio");
         audio.src = './assets/' + audioFileName;
-        audio.volume = initialVolume
+        audio.volume = 0;
+        audio.play();
+        audio.pause();
         this.audioInfos[name] = {
             audio,
             initialVolume
@@ -29,7 +36,7 @@ export default {
         const origAudio = origAudioInfo.audio;
         const audio = document.createElement("audio");
         audio.src = origAudio.src;
-        audio.volume = origAudio.volume;
+        audio.volume = origAudioInfo.initialVolume;
         return {
             audio,
             initialVolume: origAudioInfo.initialVolume,
