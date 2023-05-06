@@ -2,7 +2,6 @@ import * as CANNON from 'cannon';
 import * as THREE from 'three';
 
 import gameEngine from '../../engine/game-engine.js';
-import gamePhysics from '../../engine/game-physics.js';
 import gameGfx from '../../engine/game-gfx.js';
 
 import GameGround from '../game-ground.js';

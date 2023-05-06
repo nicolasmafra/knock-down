@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon';
-import gamePhysics from '../engine/game-physics.js';
 
 export default class GameGround {
   body = null;
@@ -30,6 +29,12 @@ export default class GameGround {
     GameGround.color = 0xbaf2ef;
     GameGround.material.friction = 0.02;
     GameGround.material.restitution = 0;
+  }
+
+  static setAsElastic() {
+    GameGround.color = 0xbb8833;
+    GameGround.material.friction = 0.05;
+    GameGround.material.restitution = 1.0;
   }
 
   #createBody(shape, position) {

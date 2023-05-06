@@ -3,7 +3,7 @@ export default {
     music: null,
     effects: [],
     resetMusic: true,
-    generalVolume: 0.05,
+    generalVolume: 0.1,
 
     configure() {
         this.loadAudio('music', 'catch-it-117676.mp3', 0.6);

@@ -13,22 +13,24 @@ const scenarioRadius = 6;
 const angleOffset = Math.PI/2;
 const useHalfAngle = true;
 
-const pilarHeight = 0.7*playerJumpHeigth;
-const pilarRadius = 1.5*playerWidth;
-const wallHoleWidth = 2.0*playerWidth;
+const pilarHeight = 0.2;
+const pilarRadius = 1*playerWidth;
+const pilarY = 1.5*playerJumpHeigth + pilarHeight/2;
+
+const wallHoleWidth = 1.2*playerWidth;
 const wallHeight = 1.1*playerJumpHeigth;
 const wallDepth = 0.5*playerWidth;
 
-export default class CircleScenario {
+const n = 32;
+
+export default class ElasticCageScenario {
   grounds = [];
+  gemInitialPosition = new CANNON.Vec3(0, 0, pilarY + pilarHeight/2 + playerJumpHeigth/2);
 
-  constructor(n, ice) {
+  constructor() {
 
-    if (ice) {
-      GameGround.setAsIce();
-    } else {
-      GameGround.setAsGrass();
-    }
+    GameGround.setAsElastic();
+
     const wallInternalRadialDistance = scenarioRadius - wallDepth;
     const wallRadialDistance = scenarioRadius - wallDepth/2;
     const wallWidth = 2*Math.PI*wallInternalRadialDistance/n - wallHoleWidth;
@@ -50,12 +52,6 @@ export default class CircleScenario {
       new CANNON.Cylinder(scenarioRadius, scenarioRadius, 0.2),
       new THREE.CylinderGeometry(scenarioRadius, scenarioRadius, 0.2),
       new CANNON.Vec3(0, 0, 0.1),
-      gameEngine.geometryRotation)
-    );
-    this.grounds.push(new GameGround(
-      new CANNON.Cylinder(pilarRadius, pilarRadius, pilarHeight),
-      new THREE.CylinderGeometry(pilarRadius, pilarRadius, pilarHeight),
-      new CANNON.Vec3(0, 0, pilarHeight/2),
       gameEngine.geometryRotation)
     );
   }

@@ -3,6 +3,7 @@ import game from './game.js';
 
 import CircleScenario from './objects/scenarios/CircleScenario.js';
 import IslandScenario from './objects/scenarios/IslandScenario.js';
+import ElasticCageScenario from './objects/scenarios/ElasticCageScenario.js';
 
 const gameMenu = {
     configure: function() {
@@ -76,9 +77,13 @@ const gameMenu = {
                             title: "Pista de gelo",
                             action: () => this.selectCircleScenario(8, true),
                         },
-                        "island4": {
+                        "island": {
                             title: "Ilhas",
-                            action: () => this.selectIslandScenario(),
+                            action: () => this.playGame(new IslandScenario()),
+                        },
+                        "elasticCage": {
+                            title: "Gaiola elástica",
+                            action: () => this.playGame(new ElasticCageScenario()),
                         },
                         "back": {
                             title: "Voltar",
@@ -110,16 +115,13 @@ const gameMenu = {
     },
 
     selectCircleScenario: function(n, ice) {
-		game.scenario = new CircleScenario(n, ice);
-        this.playGame();
+        this.playGame(new CircleScenario(n, ice));
     },
 
-    selectIslandScenario: function(n) {
-		game.scenario = new IslandScenario();
-        this.playGame();
-    },
-
-    playGame: function() {
+    playGame: function(scenario) {
+        if (scenario) {
+            game.scenario = scenario;
+        }
         menuLib.hide();
         game.start();
     },
