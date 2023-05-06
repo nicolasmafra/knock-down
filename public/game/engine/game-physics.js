@@ -60,17 +60,6 @@ const gamePhysics = {
 		}
 		return contactNormal.dot(this.upVector) > 0.5;
 	},
-
-	clampHorizontalVelocity: function(body, max) {
-		const x = body.velocity.x;
-		const y = body.velocity.y;
-		const v2 = x*x + y*y;
-		if (v2 < max * max) return;
-
-		const ratio = Math.sqrt(v2) / max;
-		body.velocity.x /= ratio;
-		body.velocity.y /= ratio;
-	},
 };
 
 export default gamePhysics;

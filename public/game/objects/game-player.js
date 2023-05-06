@@ -11,9 +11,12 @@ const height = 1.7;
 const headRadius = width/2;
 const headHeight = 0.6;
 const bodyHeight = 1.5;
+
 const moveMagnitude = 20.0;
+const moveInitialMagnitude = 50.0;
 const jumpMagnitude = 500.0;
 const maxSpeed = 10.0;
+const minSpeed = 1.0;
 const canMoveOnAir = false;
 
 const minZ = -3*height;
@@ -110,8 +113,9 @@ export default class GamePlayer {
 
   #applyInput() {
     this.#fixBodyBelow();
+    const horizontalSpeed = this.horizontalSpeed();
     if (this.bodiesBelow.length > 0 || canMoveOnAir) {
-      this.#move();
+      this.#move(horizontalSpeed);
     }
     if (this.bodiesBelow.length > 0 && this.input.jump && !this.jumped) {
       this.#jump();
@@ -120,13 +124,28 @@ export default class GamePlayer {
     } else if (!this.input.jump) {
       this.jumped = false;
     }
-    gamePhysics.clampHorizontalVelocity(this.body, maxSpeed);
+    this.clampHorizontalVelocity(horizontalSpeed);
   }
 
-  #move() {
+  horizontalSpeed() {
+		const x = this.body.velocity.x;
+		const y = this.body.velocity.y;
+		return Math.sqrt(x*x + y*y);
+  }
+
+	clampHorizontalVelocity(horizontalSpeed) {
+		if (horizontalSpeed < maxSpeed) return;
+
+		const ratio = horizontalSpeed / maxSpeed;
+		this.body.velocity.x /= ratio;
+		this.body.velocity.y /= ratio;
+	}
+
+  #move(horizontalSpeed) {
+    const magnitude = horizontalSpeed < minSpeed ? moveInitialMagnitude : moveMagnitude;
     this.body.pointToLocalFrame
-    const x = this.input.move[0] * moveMagnitude;
-    const y = this.input.move[1] * moveMagnitude;
+    const x = this.input.move[0] * magnitude;
+    const y = this.input.move[1] * magnitude;
     const impulse = new CANNON.Vec3(x, y, 0);
     this.body.applyImpulse(impulse);
   }
