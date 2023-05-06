@@ -7,6 +7,10 @@ export default class GameGround {
   mesh = null;
   hasOutline = true;
   static color = 0x00ff00;
+  static material = new CANNON.Material({
+		friction: 0.03,
+		restitution: 0.4,
+	});
 
   constructor(shape, geometry, position, rotation) {
     this.#createBody(shape, position);
@@ -16,12 +20,24 @@ export default class GameGround {
     }
   }
 
+  static setAsGrass() {
+    GameGround.color = 0x00ee00;
+    GameGround.material.friction = 0.05;
+    GameGround.material.restitution = 0.4;
+  }
+
+  static setAsIce() {
+    GameGround.color = 0xbaf2ef;
+    GameGround.material.friction = 0.02;
+    GameGround.material.restitution = 0;
+  }
+
   #createBody(shape, position) {
     if (!position) position = new CANNON.Vec3();
     
     this.body = new CANNON.Body({
       type: CANNON.Body.STATIC,
-      material: gamePhysics.material,
+      material: GameGround.material,
     });
     this.body.addShape(shape);
     this.body.position.set(position.x, position.y, position.z);

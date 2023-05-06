@@ -17,8 +17,6 @@ const maxSpeed = 10.0;
 const canMoveOnAir = false;
 
 const minZ = -3*height;
-const maxDistance = 8;
-const maxD2 = maxDistance*maxDistance;
 
 const jumpImpulse = new CANNON.Vec3(0, 0, jumpMagnitude);
 
@@ -32,6 +30,10 @@ export default class GamePlayer {
   fallen = false;
   /** @type CANNON.Body */
   body = null;
+  material = new CANNON.Material({
+		friction: 0.04,
+		restitution: 0.1,
+	});
 
   constructor(index, color, x, y) {
     this.index = index;

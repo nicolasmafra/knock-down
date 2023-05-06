@@ -14,8 +14,8 @@ const scenarioRadius = 6;
 const angleOffset = Math.PI/2;
 const useHalfAngle = true;
 
-const pilarHeight = 0.8*playerJumpHeigth;
-const pilarWidth = 1.5*playerWidth;
+const pilarHeight = 0.7*playerJumpHeigth;
+const pilarRadius = 1.5*playerWidth;
 const wallHoleWidth = 2.0*playerWidth;
 const wallHeight = 1.1*playerJumpHeigth;
 const wallDepth = 0.5*playerWidth;
@@ -23,9 +23,13 @@ const wallDepth = 0.5*playerWidth;
 export default class CircleScenario {
   grounds = [];
 
-  constructor(n) {
+  constructor(n, ice) {
 
-    GameGround.color = 0xbaf2ef;
+    if (ice) {
+      GameGround.setAsIce();
+    } else {
+      GameGround.setAsGrass();
+    }
     const wallInternalRadialDistance = scenarioRadius - wallDepth;
     const wallRadialDistance = scenarioRadius - wallDepth/2;
     const wallWidth = 2*Math.PI*wallInternalRadialDistance/n - wallHoleWidth;
@@ -50,15 +54,14 @@ export default class CircleScenario {
       gameEngine.geometryRotation)
     );
     this.grounds.push(new GameGround(
-      new CANNON.Box(new CANNON.Vec3(pilarWidth/2, pilarWidth/2, pilarHeight/2)),
-      new THREE.BoxGeometry(pilarWidth, pilarWidth, pilarHeight),
+      new CANNON.Cylinder(pilarRadius, pilarRadius, pilarHeight),
+      new THREE.CylinderGeometry(pilarRadius, pilarRadius, pilarHeight),
       new CANNON.Vec3(0, 0, pilarHeight/2),
-      new CANNON.Quaternion().setFromAxisAngle(gameEngine.upVector, Math.PI/4))
+      gameEngine.geometryRotation)
     );
   }
 
   addToGame() {
-    gamePhysics.material.friction = 0.03;
 		gameGfx.scene.background = new THREE.Color(0x001030);
 
     this.grounds.forEach(ground => gameEngine.addToGame(ground));

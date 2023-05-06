@@ -21,7 +21,7 @@ export default class IslandScenario {
 
   constructor() {
 
-    GameGround.color = 0x00ee00;
+    GameGround.setAsGrass();
     this.#placeLineOfIslands(yDistance);
     this.#placeLineOfIslands(-yDistance);
 
@@ -49,7 +49,6 @@ export default class IslandScenario {
   }
 
   addToGame() {
-    gamePhysics.material.friction = 0.04;
 		gameGfx.scene.background = new THREE.Color("cyan");
 
     this.grounds.forEach(ground => gameEngine.addToGame(ground));

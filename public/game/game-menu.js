@@ -68,13 +68,13 @@ const gameMenu = {
                 "select-scenario": {
                     title: "Selecione o cenário",
                     children: {
-                        "circle4": {
+                        "circle4grass": {
                             title: "Quadrado",
-                            action: () => this.selectCircleScenario(4),
+                            action: () => this.selectCircleScenario(4, false),
                         },
-                        "circle8": {
-                            title: "Octágono",
-                            action: () => this.selectCircleScenario(8),
+                        "circle8ice": {
+                            title: "Pista de gelo",
+                            action: () => this.selectCircleScenario(8, true),
                         },
                         "island4": {
                             title: "Ilhas",
@@ -109,8 +109,8 @@ const gameMenu = {
         menuLib.setCurrentMenu(['select-scenario']);
     },
 
-    selectCircleScenario: function(n) {
-		game.scenario = new CircleScenario(n);
+    selectCircleScenario: function(n, ice) {
+		game.scenario = new CircleScenario(n, ice);
         this.playGame();
     },
 
