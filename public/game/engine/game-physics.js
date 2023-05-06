@@ -10,6 +10,7 @@ const gamePhysics = {
 		restitution: 0.4,
 	}),
 	timeUnit: 0.02,
+	/** @type CANNON.World */
 	world: null,
 	gravity: 9.8,
 

@@ -23,6 +23,8 @@ const gameEngine = {
 	minPlayerCount: 1,
 	running: false,
 
+	toBeRemoved: [],
+
 	configure: function() {
 		gameInput.configure();
 		looper.saveFpsHistory = true;
@@ -46,6 +48,10 @@ const gameEngine = {
 	},
 
 	removeFromGame: function(object) {
+		this.toBeRemoved.push(object);
+	},
+
+	removeFromGameNow: function(object) {
 		if (object.body) gamePhysics.world.removeBody(object.body);
 		if (object.mesh) gameGfx.removeObject(object);
 	},
@@ -81,8 +87,11 @@ const gameEngine = {
 			gameMenu.pause();
 			return;
 		}
-		this.players.forEach(player => player.update());
-		this.gem.update();
+		gamePhysics.world.bodies.forEach(body => {
+			if (body.userData && body.userData.update) {
+				body.userData.update(delta);
+			}
+		});
 		if (this.gem.timeIsOver()) {
 			this.gameOver(this.gem.player);
 			return;
@@ -99,6 +108,9 @@ const gameEngine = {
 		}
 
 		gamePhysics.update();
+
+		this.toBeRemoved.forEach(obj => this.removeFromGameNow(obj));
+		this.toBeRemoved = [];
 
 		gameGfx.render();
 		

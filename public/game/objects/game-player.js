@@ -5,6 +5,7 @@ import gameEngine from '../engine/game-engine.js';
 import gamePhysics from '../engine/game-physics.js';
 import gameInput from '../engine/game-input.js';
 import gameAudio from '../engine/game-audio.js';
+import GameBullet from './game-bullet.js';
 
 const width = 0.8;
 const height = 1.7;
@@ -20,6 +21,7 @@ const minSpeed = 1.0;
 const canMoveOnAir = false;
 
 const minZ = -3*height;
+const shootHeight = height/4;
 
 const jumpImpulse = new CANNON.Vec3(0, 0, jumpMagnitude);
 
@@ -38,6 +40,8 @@ export default class GamePlayer {
 		restitution: 0.1,
 	});
   jumped = false;
+  shot = false;
+  lastShootDir = [0,0];
 
   constructor(index, color, x, y) {
     this.index = index;
@@ -59,7 +63,7 @@ export default class GamePlayer {
   #createBody(x, y) {
     this.body = new CANNON.Body({
       shape: new CANNON.Cylinder(width/2, width/2, height),
-      material: gamePhysics.material,
+      material: this.material,
       fixedRotation: true,
       linearDamping: 0.05,
       mass: 70,
@@ -125,6 +129,17 @@ export default class GamePlayer {
       this.jumped = false;
     }
     this.clampHorizontalVelocity(horizontalSpeed);
+    
+    if (this.input.move[0] != 0 || this.input.move[1] != 0) {
+      this.lastShootDir[0] = this.input.move[0];
+      this.lastShootDir[1] = this.input.move[1];
+    }
+    if (this.input.shoot && !this.shot) {
+      this.#shoot();
+      this.shot = true;
+    } else if (!this.input.shoot) {
+      this.shot = false;
+    }
   }
 
   horizontalSpeed() {
@@ -142,8 +157,10 @@ export default class GamePlayer {
 	}
 
   #move(horizontalSpeed) {
+    if (this.input.move[0] == 0 && this.input.move[1] == 0) {
+      return;
+    }
     const magnitude = horizontalSpeed < minSpeed ? moveInitialMagnitude : moveMagnitude;
-    this.body.pointToLocalFrame
     const x = this.input.move[0] * magnitude;
     const y = this.input.move[1] * magnitude;
     const impulse = new CANNON.Vec3(x, y, 0);
@@ -153,6 +170,17 @@ export default class GamePlayer {
   #jump() {
     this.body.applyImpulse(jumpImpulse);
     gameAudio.playEffect('jump');
+  }
+
+  #shoot() {
+    const distance = width/2 + GameBullet.bulletRadius;
+    const angle = Math.atan2(this.lastShootDir[1], this.lastShootDir[0]);
+    const position = new CANNON.Vec3(
+      this.body.position.x + distance*Math.cos(angle),
+      this.body.position.y + distance*Math.sin(angle),
+      this.body.position.z + shootHeight
+    );
+    GameBullet.spawn(this, angle, position);
   }
 
   checkFallen() {

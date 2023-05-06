@@ -7,6 +7,7 @@ const gameInput = {
         {
             move: [0,0],
             jump: false,
+            shoot: false,
             escape: false,
         }
     ],
@@ -38,12 +39,14 @@ const gameInput = {
         input.move[0] = 0;
         input.move[1] = 0;
         input.jump = false;
+        input.shoot = false;
         input.escape = false;
 
         if (gamepad) {
             input.move[0] += gamepad.buttons[15].value - gamepad.buttons[14].value + gamepad.axes[0];
             input.move[1] -= gamepad.buttons[13].value - gamepad.buttons[12].value + gamepad.axes[1];
             input.jump = gamepad.buttons[0].pressed;
+            input.shoot = gamepad.buttons[2].pressed;
             input.escape = gamepad.buttons[9].pressed;
             
             gamepadProxy.normalizeAxisPair(input.move);
