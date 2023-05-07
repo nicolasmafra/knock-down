@@ -58,6 +58,7 @@ export default class GameGem {
 
   playerPickup(player) {
     this.player = player;
+    this.player.gem = this;
     this.time = 0;
     gameAudio.playEffect('gem');
     gameAudio.playEffect('clock');
@@ -84,6 +85,7 @@ export default class GameGem {
   }
 
   reset() {
+    this.player.gem = null;
     this.player = null;
     this.time = 0;
   }

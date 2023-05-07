@@ -11,6 +11,7 @@ export default {
         this.loadAudio('jump', 'cartoon-jump-6462.mp3', 1);
         this.loadAudio('gem', 'coin-pickup-98269.mp3', 1);
         this.loadAudio('clock', 'time-passing-sound-effect-fast-clock-108403.mp3', 1);
+        this.loadAudio('hurt', 'accidentally-punching-the-floor-99814.mp3', 1);
     },
 
     loadAudio(name, audioFileName, initialVolume) {

@@ -59,6 +59,16 @@ export default class GameBullet {
     this.body.userData = this;
   }
 
+  afterAddToGame() {
+    this.body.addEventListener('collide', (event) => {
+      let object = gamePhysics.inContact(event.contact, this.body);
+      if (object.userData instanceof GamePlayer && object.userData != this.shooterPlayer) {
+        object.userData.receiveBullet(this);
+        gameEngine.removeFromGame(this);
+      }
+    });
+  }
+
   /**
    * @param {GamePlayer} player
    * @param {number} angle 

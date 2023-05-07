@@ -22,6 +22,7 @@ const canMoveOnAir = false;
 
 const minZ = -3*height;
 const shootHeight = height/4;
+const shotTotalTime = 1;
 
 const jumpImpulse = new CANNON.Vec3(0, 0, jumpMagnitude);
 
@@ -40,8 +41,9 @@ export default class GamePlayer {
 		restitution: 0.1,
 	});
   jumped = false;
-  shot = false;
+  shotTime = 0;
   lastShootDir = [0,0];
+  gem = null;
 
   constructor(index, color, x, y) {
     this.index = index;
@@ -97,6 +99,11 @@ export default class GamePlayer {
     if (this.checkFallen()) {
       return;
     }
+
+    if (this.shotTime > 0) {
+      this.shotTime -= gamePhysics.timeUnit;
+    }
+
     if (this.input) {
       this.#applyInput();
     }
@@ -134,11 +141,9 @@ export default class GamePlayer {
       this.lastShootDir[0] = this.input.move[0];
       this.lastShootDir[1] = this.input.move[1];
     }
-    if (this.input.shoot && !this.shot) {
+    if (this.input.shoot && this.shotTime <= 0) {
       this.#shoot();
-      this.shot = true;
-    } else if (!this.input.shoot) {
-      this.shot = false;
+      this.shotTime = shotTotalTime;
     }
   }
 
@@ -191,6 +196,13 @@ export default class GamePlayer {
       this.fallen = true;
     }
     return this.fallen;
+  }
+
+  receiveBullet() {
+    if (this.gem) {
+      this.gem.reset();
+    }
+    gameAudio.playEffect('hurt');
   }
 
   #fixBodyBelow() {
