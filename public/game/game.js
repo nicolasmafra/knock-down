@@ -1,4 +1,4 @@
-import looper from '../../libs/looper.js';
+import looper from '../libs/looper.js';
 import gameEngine from './engine/game-engine.js';
 import gamepadMenu from '../libs/gamepad-menu.js';
 import gameAudio from './engine/game-audio.js';
