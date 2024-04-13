@@ -1,17 +1,16 @@
 {
-  "name": "easy-game-dev",
+  "name": "knock-down",
   "license": "MIT",
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "yarn http-server -p 8000"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nickmafra/easy-game-dev.git"
+    "url": "git+https://github.com/nicolasmafra/knock-down.git"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "http": "^0.0.1-security"
+    "http-server": "^14.1.1"
   }
 }
